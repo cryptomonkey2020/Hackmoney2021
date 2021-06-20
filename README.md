@@ -31,5 +31,6 @@
 
 * [Rarible](https://rarible.org/)
 
+* [Circle](https://developers.circle.com/docs)
 
 ## Setup 
