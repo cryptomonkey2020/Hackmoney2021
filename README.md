@@ -15,9 +15,9 @@
 
 * [Solidity](https://docs.soliditylang.org/en/latest/)
 
-* [Truffle](https://www.trufflesuite.com/docs/truffle/overview)
+* [Hardhat](https://hardhat.org/)
 
-* [Web3.js](https://web3js.readthedocs.io/en/v1.3.4/#)
+* [Ethers](https://docs.ethers.io/v5/)
 
 * [Infura](https://infura.io/)
 
