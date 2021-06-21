@@ -33,4 +33,8 @@
 
 * [Circle](https://developers.circle.com/docs)
 
+* [88mph](https://88mph.app/docs/)
+
+* [Superfluid](https://docs.superfluid.finance/superfluid/)
+
 ## Setup 
