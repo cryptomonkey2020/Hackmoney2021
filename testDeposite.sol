@@ -46,7 +46,7 @@ contract AaveExample {
         aaveLendingPool.deposit(address(usdc), _amountInUsdc, 0);
     }
     
-    function userWithdrawDai(uint256 _amountInUsdc) external {
+    function userWithdrawUsdc(uint256 _amountInUsdc) external {
         require(userDepositedUsdc[msg.sender] >= _amountInUsdc, "You cannot withdraw more than deposited!");
 
         aUsdc.redeem(_amountInUsdc);
