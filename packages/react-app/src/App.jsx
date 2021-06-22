@@ -23,7 +23,7 @@ import {
   useUserProvider,
 } from "./hooks";
 // import Hints from "./Hints";
-import { ExampleUI, Hints, Subgraph } from "./views";
+import { ExampleUI, Hints, Subgraph, MainPage } from "./views";
 /*
     Welcome to 🏗 scaffold-eth !
 
@@ -292,6 +292,16 @@ function App(props) {
       {networkDisplay}
       <BrowserRouter>
         <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
+        <Menu.Item key="/mainpage">
+            <Link
+              onClick={() => {
+                setRoute("/mainpage");
+              }}
+              to="/mainpage"
+            >
+                Home
+            </Link>
+          </Menu.Item>
           <Menu.Item key="/">
             <Link
               onClick={() => {
@@ -381,6 +391,11 @@ function App(props) {
             />
             */}
           </Route>
+
+          <Route path="/mainpage">
+            <MainPage />
+          </Route>
+
           <Route path="/hints">
             <Hints
               address={address}
