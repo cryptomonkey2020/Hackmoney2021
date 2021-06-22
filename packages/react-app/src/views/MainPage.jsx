@@ -1,9 +1,12 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 import React from "react";
+import logo from "../assets/logo192.png";
+import "../views/MainPage.css";
 
 function MainPage() {
   return (
     <>
+      <img src={logo} alt="company logo" />
       <h1>DeDP - Decentrelized Donation Platfrom</h1>
       <p>
         Our mission is to create a social positive donation platform which maximize the value and impact of your
