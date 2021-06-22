@@ -18,24 +18,28 @@ interface IAaveLendingPool {
 }
 
 contract AaveExample {
+    
+    uint public balanceReceived = 0;
     IERC20 public usdc = IERC20(0xe22da380ee6B445bb8273C81944ADEB6E8450422); //Kovan address
     IaToken public aUsdc = IaToken(0xe12AFeC5aa12Cf614678f9bFeeB98cA9Bb95b5B0); //Kovan address
     IaveProvider provider   = IaveProvider(0x88757f2f99175387aB4C6a4b3067c77A695b0349);
     
-    //IAaveLendingPool public aaveLendingPool = IAaveLendingPool(provider.getLendingPool()); // Kovan address
-    IAaveLendingPool public aaveLendingPool = IAaveLendingPool(0xE0fBa4Fc209b4948668006B2bE61711b7f465bAe); // Kovan address
+    IAaveLendingPool public aaveLendingPool = IAaveLendingPool(provider.getLendingPool()); // Kovan address
+    //IAaveLendingPool public aaveLendingPool = IAaveLendingPool(0xE0fBa4Fc209b4948668006B2bE61711b7f465bAe); // Kovan address
 
     
     mapping(address => uint256) public userDepositedUsdc;
     
     constructor()   {
-
+        uint256 max = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
+        usdc.approve(address(aaveLendingPool), max);
     }
     
-    function approveUsdc() public{
-        usdc.approve(address(aaveLendingPool), 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff);
-    } 
+    function receiveMoney() public payable {
+        balanceReceived += msg.value;
+    }
     
+
     function userDepositUsdc(uint256 _amountInUsdc) external {
         userDepositedUsdc[msg.sender] = _amountInUsdc;
         require(usdc.transferFrom(msg.sender, address(this), _amountInUsdc), "USDC Transfer failed!");
