@@ -8,7 +8,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
-import { Account, Contract, Faucet, GasGauge, Header, Ramp, ThemeSwitch } from "./components";
+import { Account, Contract, Faucet, GasGauge, Header, Ramp, ThemeSwitch, Lend } from "./components";
 import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
 import {
@@ -44,7 +44,7 @@ import { ExampleUI, Hints, Subgraph, MainPage } from "./views";
 */
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS.kovan; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -312,6 +312,16 @@ function App(props) {
               YourContract
             </Link>
           </Menu.Item>
+          <Menu.Item key="/lending">
+            <Link
+              onClick={() => {
+                setRoute("/lending");
+              }}
+              to="/lending"
+            >
+              Lend (Aave)
+            </Link>
+          </Menu.Item>
           <Menu.Item key="/hints">
             <Link
               onClick={() => {
@@ -404,6 +414,14 @@ function App(props) {
               price={price}
             />
           </Route>
+
+          <Route path="/lending">
+            <Lend
+              selectedProvider={userProvider}
+              ethPrice={price}
+            />
+          </Route>
+
           <Route path="/exampleui">
             <ExampleUI
               address={address}

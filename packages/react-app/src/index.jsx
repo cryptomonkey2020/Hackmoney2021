@@ -12,7 +12,14 @@ const themes = {
 
 const prevTheme = window.localStorage.getItem("theme");
 
-const subgraphUri = "http://localhost:8000/subgraphs/name/scaffold-eth/your-contract";
+// const subgraphUri = "http://localhost:8000/subgraphs/name/scaffold-eth/your-contract";
+
+let subgraphUri
+if(process.env.REACT_APP_NETWORK==='kovan') {
+  subgraphUri = "https://api.thegraph.com/subgraphs/name/aave/protocol-v2-kovan"
+} else {
+  subgraphUri = "https://api.thegraph.com/subgraphs/name/aave/protocol-v2"
+}
 
 const client = new ApolloClient({
   uri: subgraphUri,

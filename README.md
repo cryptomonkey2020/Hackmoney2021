@@ -1,4 +1,4 @@
-# DeDP
+# Give
 
 ## Table of contents
 
@@ -38,3 +38,9 @@
 * [Superfluid](https://docs.superfluid.finance/superfluid/)
 
 ## Setup 
+
+Set up Kovan testnet. Create .env in /packages/hardhat/ and /packages/react-app/ using
+```
+REACT_APP_PROVIDER=https://kovan.infura.io/v3/0982eb85b1bb42aba2cb1ceeef545e1b
+REACT_APP_NETWORK=kovan
+```
