@@ -128,7 +128,7 @@ contract AaveExample {
     function userDepositUsdc(uint256 _amountInUsdc) external {
         userDepositedUsdc[msg.sender] += _amountInUsdc;
         require(usdc.transferFrom(msg.sender, address(this), _amountInUsdc), "USDC Transfer failed!");
-        aaveLendingPool.deposit(address(usdc), _amountInUsdc, address(this), 0);
+        aaveLendingPool.deposit(address(usdc), _amountInUsdc, msg.sender, 0);
     }
 
     function userBalanceUsdc(address sender) external view returns (uint256) {
