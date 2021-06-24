@@ -131,9 +131,13 @@ contract AaveExample {
     
     // User deposit USDT and the A token goes to this contract
     function userDepositUsdc(uint256 _amountInUsdc) external {
-        userDepositedUsdc[msg.sender] = _amountInUsdc;
+        userDepositedUsdc[msg.sender] += _amountInUsdc;
         require(usdc.transferFrom(msg.sender, address(this), _amountInUsdc), "USDC Transfer failed!");
         aaveLendingPool.deposit(address(usdc), _amountInUsdc, msg.sender, 0);
+    }
+
+    function userBalanceUsdc() external view returns (uint256) {
+        return aUsdc.balanceOf(msg.sender);
     }
     
     // For testing pupose withdrawing to this contract now
