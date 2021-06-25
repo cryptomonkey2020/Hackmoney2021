@@ -128,7 +128,7 @@ contract AaveExample {
     function userDepositUsdc(uint256 _amountInUsdc) external {
         userDepositedUsdc[msg.sender] += _amountInUsdc;
         require(usdc.transferFrom(msg.sender, address(this), _amountInUsdc), "USDC Transfer failed!");
-        aaveLendingPool.deposit(address(usdc), _amountInUsdc, msg.sender, 0);
+        aaveLendingPool.deposit(address(usdc), _amountInUsdc, address(this), 0);
     }
 
     function userBalanceUsdc(address sender) external view returns (uint256) {
@@ -142,6 +142,6 @@ contract AaveExample {
     function userWithdrawUsdc(uint256 _amountInUsdc) external {
         require(this.userInterests(msg.sender) >= _amountInUsdc, "You cannot withdraw more than deposited!");
         userDepositedUsdc[msg.sender] = userDepositedUsdc[msg.sender] - _amountInUsdc;
-        aaveLendingPool.withdraw(address(aUsdc), _amountInUsdc, msg.sender); 
+        aaveLendingPool.withdraw(address(usdc), _amountInUsdc, msg.sender);
     }
 }
