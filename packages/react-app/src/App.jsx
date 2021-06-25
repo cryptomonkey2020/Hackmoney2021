@@ -23,7 +23,7 @@ import {
   useUserProvider,
 } from "./hooks";
 // import Hints from "./Hints";
-import { ExampleUI, Hints, Subgraph, MainPage } from "./views";
+import { ExampleUI, Hints, Subgraph, MainPage, Donate } from "./views";
 /*
     Welcome to 🏗 scaffold-eth !
 
@@ -302,7 +302,17 @@ function App(props) {
                 Home
             </Link>
           </Menu.Item>
-          <Menu.Item key="/">
+          <Menu.Item key="/donate">
+            <Link
+              onClick={() => {
+                setRoute("/donate");
+              }}
+              to="/donate"
+            >
+                Donate
+            </Link>
+          </Menu.Item>
+          {/* <Menu.Item key="/">
             <Link
               onClick={() => {
                 setRoute("/");
@@ -311,7 +321,7 @@ function App(props) {
             >
               YourContract
             </Link>
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item key="/lending">
             <Link
               onClick={() => {
@@ -406,6 +416,10 @@ function App(props) {
             <MainPage />
           </Route>
 
+          <Route path="/donate">
+            <Donate />
+          </Route>
+
           <Route path="/hints">
             <Hints
               address={address}
@@ -477,7 +491,7 @@ function App(props) {
       </div>
 
       {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
-      <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
+      {/* <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
         <Row align="middle" gutter={[4, 4]}>
           <Col span={8}>
             <Ramp price={price} address={address} networks={NETWORKS} />
@@ -500,7 +514,7 @@ function App(props) {
               Support
             </Button>
           </Col>
-        </Row>
+        </Row> */}
 
         <Row align="middle" gutter={[4, 4]}>
           <Col span={24}>
@@ -515,7 +529,7 @@ function App(props) {
           </Col>
         </Row>
       </div>
-    </div>
+    // </div>
   );
 }
 
