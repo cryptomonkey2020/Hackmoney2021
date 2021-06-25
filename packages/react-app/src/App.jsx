@@ -322,7 +322,7 @@ function App(props) {
               Lend (Aave)
             </Link>
           </Menu.Item>
-          <Menu.Item key="/hints">
+          {/* <Menu.Item key="/hints">
             <Link
               onClick={() => {
                 setRoute("/hints");
@@ -361,7 +361,7 @@ function App(props) {
             >
               Subgraph
             </Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </Menu>
 
         <Switch>
