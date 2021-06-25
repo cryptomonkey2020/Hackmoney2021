@@ -52,7 +52,7 @@ git clone https://github.com/cryptomonkey2020/Hackmoney2021.git
 * Change into the directory
 
 ```bash
-Hackmoney2021
+cd Hackmoney2021
 ```
 
 * Install dependencies with yarn
