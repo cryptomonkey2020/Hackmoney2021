@@ -12,35 +12,35 @@ export default function Donate() {
       <Layout>
         <Content>
           <h1>Please select the organization you want to donate to.</h1>
-        <Card title="Organizations Looking for help">
-          <Space>
-          <Card type="inner" title="Support The Environment">
+          <Card title="Organizations Looking for help">
+            <Space>
+              <Card type="inner" title="Support The Environment">
                 <Space direction="vertical">
                   <Image width={200} src={environment} />
-          We have a dream, one of lives transformed, and autism embraced. With the hope of enriching the lives of
-              of children, youths and...
+                  We have a dream, one of lives transformed, and autism embraced. With the hope of enriching the lives
+                  of children, youths and...
                   <Button>Donate</Button>
-                  </Space>
+                </Space>
               </Card>
-        <Card type="inner" title="Support Children in Need">
+              <Card type="inner" title="Support Children in Need">
                 <Space direction="vertical">
-                <Image width={200} src={children} />
-          We have a dream, one of lives transformed, and autism embraced. With the hope of enriching the lives of
-              of children, youths and...
+                  <Image width={200} src={children} />
+                  We have a dream, one of lives transformed, and autism embraced. With the hope of enriching the lives
+                  of children, youths and...
                   <Button>Donate</Button>
-                  </Space>
+                </Space>
               </Card>
-            <Card type="inner" title="Support Homeless Animals">
+              <Card type="inner" title="Support Homeless Animals">
                 <Space direction="vertical">
-                <Image width={200} src={animals} />
-          We have a dream, one of lives transformed, and autism embraced. With the hope of enriching the lives of
-              of children, youths and...
+                  <Image width={200} src={animals} />
+                  We have a dream, one of lives transformed, and autism embraced. With the hope of enriching the lives
+                  of children, youths and...
                   <Button>Donate</Button>
-                  </Space>
+                </Space>
               </Card>
-              </Space>
+            </Space>
           </Card>
-        </Content> 
+        </Content>
       </Layout>
     </>
   );

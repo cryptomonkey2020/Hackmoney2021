@@ -292,14 +292,14 @@ function App(props) {
       {networkDisplay}
       <BrowserRouter>
         <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
-        <Menu.Item key="/mainpage">
+          <Menu.Item key="/mainpage">
             <Link
               onClick={() => {
                 setRoute("/mainpage");
               }}
               to="/mainpage"
             >
-                Home
+              Home
             </Link>
           </Menu.Item>
           <Menu.Item key="/donate">
@@ -309,7 +309,7 @@ function App(props) {
               }}
               to="/donate"
             >
-                Donate
+              Donate
             </Link>
           </Menu.Item>
           {/* <Menu.Item key="/">
@@ -430,10 +430,7 @@ function App(props) {
           </Route>
 
           <Route path="/lending">
-            <Lend
-              selectedProvider={userProvider}
-              ethPrice={price}
-            />
+            <Lend selectedProvider={userProvider} ethPrice={price} />
           </Route>
 
           <Route path="/exampleui">
@@ -516,19 +513,15 @@ function App(props) {
           </Col>
         </Row> */}
 
-        <Row align="middle" gutter={[4, 4]}>
-          <Col span={24}>
-            {
-              /*  if the local provider has a signer, let's show the faucet:  */
-              faucetAvailable ? (
-                <Faucet localProvider={localProvider} price={price} ensProvider={mainnetProvider} />
-              ) : (
-                ""
-              )
-            }
-          </Col>
-        </Row>
-      </div>
+      <Row align="middle" gutter={[4, 4]}>
+        <Col span={24}>
+          {
+            /*  if the local provider has a signer, let's show the faucet:  */
+            faucetAvailable ? <Faucet localProvider={localProvider} price={price} ensProvider={mainnetProvider} /> : ""
+          }
+        </Col>
+      </Row>
+    </div>
     // </div>
   );
 }
