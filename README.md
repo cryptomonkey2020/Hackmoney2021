@@ -37,10 +37,43 @@
 
 * [Superfluid](https://docs.superfluid.finance/superfluid/)
 
-## Setup 
+## Setup
 
-Set up Kovan testnet. Create .env in /packages/hardhat/ and /packages/react-app/ using
+Required tools: [Node](https://nodejs.org/en/)/[Yarn](https://yarnpkg.com/)
+
+### Steps
+
+* Clone this repo
+
+```bash
+git clone https://github.com/cryptomonkey2020/Hackmoney2021.git
+```
+
+* Change into the directory
+
+```bash
+Hackmoney2021
+```
+
+* Install dependencies with yarn
+
+```bash
+yarn install
+```
+
+### Set up Kovan testnet
+
+* Create .env in /packages/hardhat/ and /packages/react-app/ using
+
 ```
 REACT_APP_PROVIDER=https://kovan.infura.io/v3/0982eb85b1bb42aba2cb1ceeef545e1b
 REACT_APP_NETWORK=kovan
+```
+
+### Run the Dapp
+
+* In the terminal, run the following
+
+```bash
+yarn start
 ```
