@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 import React from "react";
 import logo from "../assets/logo192.png";
-import "../views/MainPage.css";
+import "./MainPage.css";
 
 function MainPage() {
   return (
@@ -14,7 +14,7 @@ function MainPage() {
       </p>
       <p>1. Investing the initial donation</p>
       <p>2. Generate a Monthly revenue stream using the principal</p>
-      <p>3. You'll receive the principal on maturity date</p>
+      <p>3. You will receive the principal on maturity date</p>
     </>
   );
 }
