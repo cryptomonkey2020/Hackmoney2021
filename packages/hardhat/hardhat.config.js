@@ -21,7 +21,7 @@ const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 //
 // Select the network you want to deploy to here:
 //
-const defaultNetwork = "localhost";
+const defaultNetwork = "kovan";
 
 function mnemonic() {
   try {
@@ -57,7 +57,7 @@ module.exports = {
       },
     },
     kovan: {
-      url: "https://kovan.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", //<---- YOUR INFURA ID! (or it won't work)
+      url: "https://kovan.infura.io/v3/0982eb85b1bb42aba2cb1ceeef545e1b", //<---- YOUR INFURA ID! (or it won't work)
       accounts: {
         mnemonic: mnemonic(),
       },
@@ -98,25 +98,27 @@ module.exports = {
   solidity: {
     compilers: [
       {
+        version: "0.8.0",
+      },
+      {
         version: "0.7.6",
         settings: {
           optimizer: {
             enabled: true,
-            runs: 200
-          }
-        }
+            runs: 200,
+          },
+        },
       },
       {
         version: "0.6.7",
         settings: {
           optimizer: {
             enabled: true,
-            runs: 200
-          }
-        }
-      }
+            runs: 200,
+          },
+        },
+      },
     ],
-
   },
   etherscan: {
     // Your API key for Etherscan

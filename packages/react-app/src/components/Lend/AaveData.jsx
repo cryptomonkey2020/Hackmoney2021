@@ -193,7 +193,6 @@ export function useAaveData({ selectedProvider, markets }) {
     if(!reserveTokens && dataProviderContract && selectedProvider) {
       console.log('getting Reserve Tokens')
       let _reserveTokens = await dataProviderContract.getAllReservesTokens()//.getReserveData("0x6B175474E89094C44Da98b954EedeAC495271d0F")//makeCall('getAddress', addressProviderContract, ["0x1"])
-      console.log(_reserveTokens)
       setReserveTokens(_reserveTokens)
     }
   }
