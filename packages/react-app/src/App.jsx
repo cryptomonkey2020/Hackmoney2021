@@ -23,7 +23,7 @@ import {
   useUserProvider,
 } from "./hooks";
 // import Hints from "./Hints";
-import { ExampleUI, Hints, Subgraph, MainPage, Donation } from "./views";
+import { ExampleUI, Hints, Subgraph, MainPage, Donate, Donation } from "./views";
 /*
     Welcome to 🏗 scaffold-eth !
 
@@ -292,17 +292,27 @@ function App(props) {
       {networkDisplay}
       <BrowserRouter>
         <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
-        <Menu.Item key="/mainpage">
+          <Menu.Item key="/mainpage">
             <Link
               onClick={() => {
                 setRoute("/mainpage");
               }}
               to="/mainpage"
             >
-                Home
+              Home
             </Link>
           </Menu.Item>
-          <Menu.Item key="/">
+          <Menu.Item key="/donate">
+            <Link
+              onClick={() => {
+                setRoute("/donate");
+              }}
+              to="/donate"
+            >
+              Donate
+            </Link>
+          </Menu.Item>
+          {/* <Menu.Item key="/">
             <Link
               onClick={() => {
                 setRoute("/");
@@ -311,7 +321,7 @@ function App(props) {
             >
               YourContract
             </Link>
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item key="/lending">
             <Link
               onClick={() => {
@@ -322,7 +332,7 @@ function App(props) {
               Lend (Aave)
             </Link>
           </Menu.Item>
-          <Menu.Item key="/hints">
+          {/* <Menu.Item key="/hints">
             <Link
               onClick={() => {
                 setRoute("/hints");
@@ -361,7 +371,7 @@ function App(props) {
             >
               Subgraph
             </Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </Menu>
 
         <Switch>
@@ -382,6 +392,10 @@ function App(props) {
             <MainPage />
           </Route>
 
+          <Route path="/donate">
+            <Donate />
+          </Route>
+
           <Route path="/hints">
             <Hints
               address={address}
@@ -392,10 +406,7 @@ function App(props) {
           </Route>
 
           <Route path="/lending">
-            <Lend
-              selectedProvider={userProvider}
-              ethPrice={price}
-            />
+            <Lend selectedProvider={userProvider} ethPrice={price} />
           </Route>
 
           <Route path="/exampleui">
@@ -453,7 +464,7 @@ function App(props) {
       </div>
 
       {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
-      <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
+      {/* <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
         <Row align="middle" gutter={[4, 4]}>
           <Col span={8}>
             <Ramp price={price} address={address} networks={NETWORKS} />
@@ -476,22 +487,18 @@ function App(props) {
               Support
             </Button>
           </Col>
-        </Row>
+        </Row> */}
 
-        <Row align="middle" gutter={[4, 4]}>
-          <Col span={24}>
-            {
-              /*  if the local provider has a signer, let's show the faucet:  */
-              faucetAvailable ? (
-                <Faucet localProvider={localProvider} price={price} ensProvider={mainnetProvider} />
-              ) : (
-                ""
-              )
-            }
-          </Col>
-        </Row>
-      </div>
+      <Row align="middle" gutter={[4, 4]}>
+        <Col span={24}>
+          {
+            /*  if the local provider has a signer, let's show the faucet:  */
+            faucetAvailable ? <Faucet localProvider={localProvider} price={price} ensProvider={mainnetProvider} /> : ""
+          }
+        </Col>
+      </Row>
     </div>
+    // </div>
   );
 }
 
