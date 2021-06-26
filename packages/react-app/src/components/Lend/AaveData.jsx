@@ -31,7 +31,7 @@ export function useAaveData({ selectedProvider, markets }) {
 
   const [reserveTokens, setReserveTokens] = useState()
 
-  const signer = selectedProvider.getSigner()
+  const signer = selectedProvider && selectedProvider.getSigner()
   const addressProviderContract = new ethers.Contract(POOL_ADDRESSES_PROVIDER_ADDRESS, IAddressProvider, signer);
   const dataProviderContract = new ethers.Contract(PROTOCOL_DATA_PROVIDER, IDataProvider, signer);
   const lendingPoolContract = new ethers.Contract(LENDING_POOL, ILendingPool, signer);
@@ -143,7 +143,7 @@ export function useAaveData({ selectedProvider, markets }) {
   }, [userConfiguration])
 
   const getUserAssetData = async () => {
-    if(userAssetList && reserveTokens) {
+    if(userAssetList && reserveTokens && signer) {
       let address = await signer.getAddress()
       if(Object.keys(userAssetList).length === 0) {
         setUserAssetData({})
@@ -180,13 +180,15 @@ export function useAaveData({ selectedProvider, markets }) {
   },[userAssetList])
 
   const getUserInfo = async () => {
-    console.log('getting user info')
-    let address = await signer.getAddress()
-    setAddress(address)
-    let _accountData = await lendingPoolContract.getUserAccountData(address)
-    setUserAccountData(_accountData)
-    let _userConfiguration = await lendingPoolContract.getUserConfiguration(address)
-    setUserConfiguration(_userConfiguration)
+    if (signer) {
+      console.log('getting user info')
+      let address = await signer.getAddress()
+      setAddress(address)
+      let _accountData = await lendingPoolContract.getUserAccountData(address)
+      setUserAccountData(_accountData)
+      let _userConfiguration = await lendingPoolContract.getUserConfiguration(address)
+      setUserConfiguration(_userConfiguration)
+    }
   }
 
   const getReserveTokens = async () => {

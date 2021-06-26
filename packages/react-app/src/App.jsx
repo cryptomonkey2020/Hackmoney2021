@@ -292,14 +292,24 @@ function App(props) {
       {networkDisplay}
       <BrowserRouter>
         <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
-          <Menu.Item key="/mainpage">
+          <Menu.Item key="/">
             <Link
               onClick={() => {
-                setRoute("/mainpage");
+                setRoute("/");
               }}
-              to="/mainpage"
+              to="/"
             >
               Home
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="/deposit">
+            <Link
+              onClick={() => {
+                setRoute("/deposit");
+              }}
+              to="/deposit"
+            >
+              Deposit
             </Link>
           </Menu.Item>
           <Menu.Item key="/donate">
@@ -375,20 +385,22 @@ function App(props) {
         </Menu>
 
         <Switch>
-          <Route exact path="/">
+          <Route exact path="/deposit">
             <TestFaucet 
               address={address}
-              selectedProvider={userProvider} />
+              selectedProvider={userProvider}
+              tx={tx}
+              writeContracts={writeContracts} />
             <Contract
               name="Donation"
-              signer={userProvider.getSigner()}
+              signer={userProvider && userProvider.getSigner()}
               provider={localProvider}
               address={address}
               blockExplorer={blockExplorer}
             />
           </Route>
 
-          <Route path="/mainpage">
+          <Route path="/">
             <MainPage />
           </Route>
 
@@ -428,7 +440,7 @@ function App(props) {
             <Contract
               name="DAI"
               customContract={mainnetDAIContract}
-              signer={userProvider.getSigner()}
+              signer={userProvider && userProvider.getSigner()}
               provider={mainnetProvider}
               address={address}
               blockExplorer="https://etherscan.io/"
@@ -518,6 +530,7 @@ window.ethereum &&
         window.location.reload();
       }, 1);
   });
+
 /* eslint-enable */
 
 export default App;

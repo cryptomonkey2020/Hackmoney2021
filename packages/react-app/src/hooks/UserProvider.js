@@ -27,9 +27,10 @@ const useUserProvider = (injectedProvider, localProvider) =>
       console.log("🦊 Using injected provider");
       return injectedProvider;
     }
-    if (!localProvider) return undefined;
+    // if (!localProvider) return undefined;
+    return undefined
 
-    const burnerConfig = {};
+    // const burnerConfig = {};
 
     // if (window.location.pathname) {
     //   if (window.location.pathname.indexOf("/pk") >= 0) {
@@ -49,15 +50,15 @@ const useUserProvider = (injectedProvider, localProvider) =>
     //   }
     // }
 
-    console.log("🔥 Using burner provider", burnerConfig);
-    if (localProvider.connection && localProvider.connection.url) {
-      burnerConfig.rpcUrl = localProvider.connection.url;
-      return new Web3Provider(new BurnerProvider(burnerConfig));
-    }
+    // console.log("🔥 Using burner provider", burnerConfig);
+    // if (localProvider.connection && localProvider.connection.url) {
+    //   burnerConfig.rpcUrl = localProvider.connection.url;
+    //   return new Web3Provider(new BurnerProvider(burnerConfig));
+    // }
     // eslint-disable-next-line no-underscore-dangle
-    const networkName = localProvider._network && localProvider._network.name;
-    burnerConfig.rpcUrl = `https://${networkName || "mainnet"}.infura.io/v3/${INFURA_ID}`;
-    return new Web3Provider(new BurnerProvider(burnerConfig));
+    // const networkName = localProvider._network && localProvider._network.name;
+    // burnerConfig.rpcUrl = `https://${networkName || "mainnet"}.infura.io/v3/${INFURA_ID}`;
+    // return new Web3Provider(new BurnerProvider(burnerConfig));
   }, [injectedProvider, localProvider]);
 
 export default useUserProvider;
