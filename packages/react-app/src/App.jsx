@@ -23,7 +23,7 @@ import {
   useUserProvider,
 } from "./hooks";
 // import Hints from "./Hints";
-import { ExampleUI, Hints, Subgraph, MainPage, Donate, Donation } from "./views";
+import { ExampleUI, Hints, Subgraph, MainPage, Donate, TestFaucet } from "./views";
 /*
     Welcome to 🏗 scaffold-eth !
 
@@ -376,7 +376,7 @@ function App(props) {
 
         <Switch>
           <Route exact path="/">
-            <Donation 
+            <TestFaucet 
               address={address}
               selectedProvider={userProvider} />
             <Contract
