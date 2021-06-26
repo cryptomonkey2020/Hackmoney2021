@@ -72,7 +72,14 @@ REACT_APP_NETWORK=kovan
 
 ### Run the Dapp
 
-* In the terminal, run the following
+* In ther terminal, run the following
+
+
+```bash
+yarn deploy
+```
+
+* In a separate terminal, run the following
 
 ```bash
 yarn start
