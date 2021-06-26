@@ -72,7 +72,7 @@ REACT_APP_NETWORK=kovan
 
 ### Run the Dapp
 
-* In ther terminal, run the following
+* In the terminal, run the following
 
 
 ```bash
