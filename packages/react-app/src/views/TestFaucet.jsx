@@ -24,7 +24,7 @@ const TestFaucet = ({ address: walletAddress, selectedProvider, tx, writeContrac
 
     let signer = selectedProvider && selectedProvider.getSigner()
 
-    const [donationAmount, setDonationAmount] = useState(0)
+    const [donationAmount, setDonationAmount] = useState("500")
     const [donationAsset, setDonationAsset] = useState('USDC')
     const [donationAssetAddress, setDonationAssetAddress] = useState('0xe22da380ee6B445bb8273C81944ADEB6E8450422')
     const [donationAssetDecimals, setDonationAssetDecimals] = useState(18)
@@ -103,29 +103,28 @@ const TestFaucet = ({ address: walletAddress, selectedProvider, tx, writeContrac
                     update => {
                         console.log("📡 Transaction Update:", update);
                         if (update && (update.status === "confirmed" || update.status === 1)) {
-                        console.log(" 🍾 Transaction " + update.hash + " finished!");
-                        console.log(
-                            " ⛽️ " +
-                            update.gasUsed +
-                            "/" +
-                            (update.gasLimit || update.gas) +
-                            " @ " +
-                            parseFloat(update.gasPrice) / 1000000000 +
-                            " gwei",
-                        );
+                            console.log(" 🍾 Transaction " + update.hash + " finished!");
+                            console.log(
+                                " ⛽️ " +
+                                update.gasUsed +
+                                "/" +
+                                (update.gasLimit || update.gas) +
+                                " @ " +
+                                parseFloat(update.gasPrice) / 1000000000 +
+                                " gwei",
+                            );
+                            notification.open({
+                                message: `You have approved spending on your ${donationAsset}!`,
+                                description:
+                                    <><Text>{`The donation contract can move ${donationAsset} on your behalf now.`}</Text></>,
+                            });
+                            setDonationAssetAllowance(ethers.constants.MaxUint256)
+                            setAllowing(false)
                         }
                     }
                 );
                 await tx
-
-                notification.open({
-                    message: `You revoked allowance on your ${donationAsset}!`,
-                    description:
-                        <><Text>{`The platform can't move ${donationAsset} on your behalf now.`}</Text></>,
-                });
-                setDonationAssetAllowance(ethers.constants.MaxUint256)
                 
-                setAllowing(false)
             }
             catch (e) {
                 console.log(e)
@@ -149,29 +148,26 @@ const TestFaucet = ({ address: walletAddress, selectedProvider, tx, writeContrac
                     update => {
                         console.log("📡 Transaction Update:", update);
                         if (update && (update.status === "confirmed" || update.status === 1)) {
-                        console.log(" 🍾 Transaction " + update.hash + " finished!");
-                        console.log(
-                            " ⛽️ " +
-                            update.gasUsed +
-                            "/" +
-                            (update.gasLimit || update.gas) +
-                            " @ " +
-                            parseFloat(update.gasPrice) / 1000000000 +
-                            " gwei",
-                        );
+                            console.log(" 🍾 Transaction " + update.hash + " finished!");
+                            console.log(
+                                " ⛽️ " +
+                                update.gasUsed +
+                                "/" +
+                                (update.gasLimit || update.gas) +
+                                " @ " +
+                                parseFloat(update.gasPrice) / 1000000000 +
+                                " gwei",
+                            );
+                            notification.open({
+                                message: `You revoked allowance on your ${donationAsset}!`,
+                                description:
+                                    <><Text>{`The platform can't move ${donationAsset} on your behalf now.`}</Text></>,
+                            });
+                            setDonationAssetAllowance(ethers.constants.Zero)
                         }
                     }
                 );
                 await tx
-                
-                notification.open({
-                    message: `You revoked allowance on your ${donationAsset}!`,
-                    description:
-                        <><Text>{`The platform can't move ${donationAsset} on your behalf now.`}</Text></>,
-                });
-                setDonationAssetAllowance(ethers.constants.Zero)
-
-                
                 setAllowing(false)
             }
             catch (e) {
@@ -238,7 +234,7 @@ const TestFaucet = ({ address: walletAddress, selectedProvider, tx, writeContrac
             setDepositing(true)
 
             const result = tx(
-                writeContracts.Donation.userDepositUsdt(ethers.utils.parseUnits(donationAmount, donationAssetDecimals)),
+                writeContracts.Donation.userDepositUsdc(ethers.utils.parseUnits(donationAmount, donationAssetDecimals), ethers.utils.parseUnits("1", 1)),
                 update => {
                     console.log("📡 Transaction Update:", update);
                     if (update && (update.status === "confirmed" || update.status === 1)) {
@@ -299,47 +295,50 @@ const TestFaucet = ({ address: walletAddress, selectedProvider, tx, writeContrac
                 >
                     {(writeContracts && writeContracts['Donation']) ?
                         <>
-                            {/* {userAccountData
-                                ? <AccountSummary userAccountData={userAccountData} />
-                                : <Skeleton active />
-                            } */}
-
-                            {assetData &&
-                                <>
-                                    <Title level={4}>Select asset to donate</Title>
-                                    <Row justify="center" align="middle" gutter={16}>
-                                        <Col>
-                                            <Select showSearch value={donationAsset} style={{ width: '120px' }} size={'large'} onChange={(value) => {
-                                                setDonationAsset(value)
-                                                const _assetAddress = findAssetAddressUsingSymbol(value)
-                                                if (_assetAddress && _assetAddress.underlyingAsset){
-                                                    console.log(_assetAddress.underlyingAsset)
-                                                    setDonationAssetAddress(_assetAddress.underlyingAsset)
-                                                }
-                                            }} filterOption={(input, option) =>
-                                                option.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                            } optionFilterProp="children">
-                                                {assetData
-                                                    .filter((asset) => asset.usageAsCollateralEnabled )
-                                                    .map(token => (
-                                                        <Option key={token.symbol} value={token.symbol}>{token.symbol}</Option>
-                                                    ))
-                                                }
-                                            </Select>
-                                        </Col>
+                            <div>
+                                <Row gutter={16} justify="center" align="middle">
+                                    <Col span={8}>
+                                        <Statistic title={"You have"} value={formatUnits(donationAssetBalance, donationAssetDecimals)} suffix={donationAsset} />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Statistic title={"Allowance"} value={(donationAssetAllowance && ethers.constants.MaxUint256.eq(donationAssetAllowance)) ? 'Unlimited' : formatUnits(donationAssetAllowance, donationAssetDecimals)} suffix={donationAsset} />
+                                    </Col>
+                                    {/* <Col span={8}>
+                                        <Statistic title={"Claimable from Aave"} value={formattedValue(userAccountData.availableBorrowsETH, 18, 1, showUsdPrice, ethPrice)} suffix={showUsdPrice ? "USD" : "ETH"} />
+                                    </Col> */}
+                                </Row>
+                            </div>
+                            <Divider />
+                            <div>
+                                {assetData &&
+                                    <>
+                                        <Title level={5}>Select asset to donate</Title>
                                         
-                                        {/* <Col>
-                                            {userAssetData && userAssetData[donationAsset] && <Statistic title={"Deposited"} value={parseFloat(ethers.utils.formatUnits(userAssetData[donationAsset]['currentATokenBalance'], userAssetData[donationAsset].decimals)).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 5 })} suffix={donationAsset} />}
-                                        </Col> */}
-                                    </Row>
-                                    <Divider />
-                                </>
-                            }
-                            You have <strong>{formatUnits(donationAssetBalance, donationAssetDecimals)}</strong> {donationAsset}<br/>
-                            Your address: {walletAddress}<br/>
-                            Spender (Org you are depositing to): {writeContracts && writeContracts['Donation'] && writeContracts['Donation'].address}<br/>
-                            {donationAsset} allowance: {donationAssetAllowance && ethers.constants.MaxUint256.eq(donationAssetAllowance) ? <strong>Unlimited</strong> : (donationAssetDecimals && <strong>{donationAssetAllowanceInInt}</strong>)}<br/>
-                            <Button
+                                        <Select showSearch value={donationAsset} style={{ width: '120px' }} size={'large'} onChange={(value) => {
+                                            setDonationAsset(value)
+                                            const _assetAddress = findAssetAddressUsingSymbol(value)
+                                            if (_assetAddress && _assetAddress.underlyingAsset){
+                                                console.log(_assetAddress.underlyingAsset)
+                                                setDonationAssetAddress(_assetAddress.underlyingAsset)
+                                            }
+                                        }} filterOption={(input, option) =>
+                                            option.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                        } optionFilterProp="children">
+                                            {assetData
+                                                .filter((asset) => asset.usageAsCollateralEnabled )
+                                                .map(token => (
+                                                    <Option key={token.symbol} value={token.symbol}>{token.symbol}</Option>
+                                                ))
+                                            }
+                                        </Select>
+                                    </>
+                                }
+                            </div>
+                            {/* You have <strong>{formatUnits(donationAssetBalance, donationAssetDecimals)}</strong> {donationAsset}<br/>
+                            Your address: {walletAddress}<br/> */}
+                            {/* Spender (Org you are depositing to): {writeContracts && writeContracts['Donation'] && writeContracts['Donation'].address}<br/> */}
+                            {/* {donationAsset} allowance: {donationAssetAllowance && ethers.constants.MaxUint256.eq(donationAssetAllowance) ? <strong>Unlimited</strong> : (donationAssetDecimals && <strong>{donationAssetAllowanceInInt}</strong>)}<br/> */}
+                            {/* <Button
                                 onClick={() => {
                                     setFullTokenAllowance()
                                 }}
@@ -353,7 +352,7 @@ const TestFaucet = ({ address: walletAddress, selectedProvider, tx, writeContrac
                                 }}
                                 >
                                 Set allowance to 0
-                            </Button>
+                            </Button> */}
                             <br/><br/>
                             How much do {donationAsset} do you want to deposit?{" "}
                             <input 
