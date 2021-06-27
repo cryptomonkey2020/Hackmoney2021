@@ -5,6 +5,7 @@ const debug = require('gulp-debug')
 var csso = require('gulp-csso')
 const autoprefixer = require('autoprefixer')
 const NpmImportPlugin = require('less-plugin-npm-import')
+var sass = require('gulp-sass')(require('sass'))
 
 gulp.task('less', function () {
   const plugins = [autoprefixer()]
@@ -26,3 +27,13 @@ gulp.task('less', function () {
     )
     .pipe(gulp.dest('./public'))
 })
+
+function buildStyles() {
+  return gulp.src('src/**/*.scss')
+    .pipe(sass.sync().on('error', sass.logError))
+    .pipe(gulp.dest('./'));
+};
+exports.buildStyles = buildStyles;
+exports.watch = function () {
+  gulp.watch('./sass/**/*.scss', ['sass']);
+};
