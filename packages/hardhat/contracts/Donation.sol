@@ -18,7 +18,7 @@ interface IAaveLendingPool {
 contract Donation is Ownable {
     
 
-    enum OrganizationState{Active, Stopped}
+    enum OrganizationState{Uninitialize, Active, Stopped}
 
     struct $_Organization {
         address _organizationWallet; //The organization wallet which is the only one can withdraw
@@ -52,7 +52,7 @@ contract Donation is Ownable {
     //Events
     event OrganizationCreated(uint _id, address _organization);
     event DepositedToCharity(uint _amount, uint _assetId, uint _organisationId);
-    event WithdrawCharityInterest(uint _amount, uint _assetId, address _organization);
+    event WithdrawCharityInterest(uint _amount, uint _assetId, uint _organisationId);
 
     
 
@@ -79,17 +79,17 @@ contract Donation is Ownable {
     }
     
     // User deposit USDT and the A token goes to this contract
-    function userDepositUsdc(uint _amount, uint _organisationId) external {
+    function userDepositUsdc(uint _amount, uint _orgnizationId) external {
         //Spending allowence done in the GUI
-        require(organizations[_organisationId]._state == OrganizationState.Active, "Organization not exist");
-        userDepositedUsdc[msg.sender][_organisationId] += _amount;                                  //Tarcking User deposits
-        organizations[_organisationId]._usdcBalance += _amount;
+        require(organizations[_orgnizationId]._state == OrganizationState.Active, "Organization not exist");
+        userDepositedUsdc[msg.sender][_orgnizationId] += _amount;                                  //Tarcking User deposits
+        organizations[_orgnizationId]._usdcBalance += _amount;
         require(usdc.transferFrom(msg.sender, address(this), _amount), "USDC Transfer failed!");
 
         uint balanceBeforeDeposit = aUsdc.balanceOf(address(this));
         aaveLendingPool.deposit(address(usdc), _amount, address(this), 0);
-        emit DepositedToCharity(_amount, 0, _organisationId); // Assuming USDC is asset 0
-        organizations[_organisationId]._aUsdcBalance += aUsdc.balanceOf(address(this)) - balanceBeforeDeposit;
+        emit DepositedToCharity(_amount, 0, _orgnizationId); // Assuming USDC is asset 0
+        organizations[_orgnizationId]._aUsdcBalance += aUsdc.balanceOf(address(this)) - balanceBeforeDeposit;
      }
 
     function getOrganizationBalance(uint _orgnizationId) public view returns(uint amount){
@@ -97,14 +97,23 @@ contract Donation is Ownable {
     }
 
     
-    // For testing pupose withdrawing to this contract now
+    // For testing pupose only
 
-     function userWithdrawUsdc(uint256 _amountInUsdc) external {
+     function userWithdrawUsdc(uint _amount, uint _orgnizationId ) external {
 
-           //Our organization have enough balance to withdraw
-           require(orgDepositedUsdc[msg.sender] >= _amountInUsdc, "You cannot withdraw more than deposited!");
-           orgDepositedUsdc[msg.sender] = orgDepositedUsdc[msg.sender] - _amountInUsdc;
-           //require(aUsdc.transfer(msg.sender,  _amountInUsdc), "USDC Transfer failed!");
-           aaveLendingPool.withdraw(address(usdc), _amountInUsdc, address(this)); 
+        //Our organization have enough balance to withdraw
+        require(organizations[_orgnizationId]._usdcBalance >= _amount, "You cannot withdraw more than deposited!");
+        require(organizations[_orgnizationId]._organizationWallet == msg.sender, "Only Organization adming can withdraw");
+        //Only because it's a testing funciton
+        organizations[_orgnizationId]._usdcBalance = organizations[_orgnizationId]._usdcBalance - _amount;
+        organizations[_orgnizationId]._aUsdcBalance = organizations[_orgnizationId]._aUsdcBalance - _amount;
+
+        aaveLendingPool.withdraw(address(usdc), _amount, address(this)); 
+        require(aUsdc.transfer(msg.sender,  _amount), "USDC Transfer failed!");
+        emit WithdrawCharityInterest(_amount, 0, _orgnizationId);
+     }
+
+     function withdrawOrgInterest(uint _orgnizationId) external {
+         //Calculate the gained interest
      }
 }
