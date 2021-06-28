@@ -75,7 +75,7 @@ contract Donation is Ownable {
     
     //Doesn't have a real value now .. in the future will interact with Uniswap to change to USDC
     function receiveETH() public payable {
-        balanceReceived += msg.value;
+        balanceReceived += msg.value; 
     }
     
     // User deposit USDT and the A token goes to this contract
@@ -109,7 +109,7 @@ contract Donation is Ownable {
         organizations[_orgnizationId]._aUsdcBalance = organizations[_orgnizationId]._aUsdcBalance - _amount;
 
         aaveLendingPool.withdraw(address(usdc), _amount, address(this)); 
-        require(aUsdc.transfer(msg.sender,  _amount), "USDC Transfer failed!");
+        require(usdc.transfer(msg.sender,  _amount), "USDC Transfer failed!"); 
         emit WithdrawCharityInterest(_amount, 0, _orgnizationId);
      }
 
