@@ -5,6 +5,8 @@
   --primary-hover: #ffcf76;
   --primary-light: #FFF6E5;
   --primary-light-hover: #ffebc6;
+  --primary-medium: #E48027;
+  --primary-medium-hover: #ec8c38;
 
   --success-bg: #38a534;
   --success-bg-hover: #4ebd4b;
@@ -177,6 +179,48 @@ code {
   }
 }
 
+.badge {
+  display: inline-block;
+  padding: 0.5rem 0.7rem;
+  font-size: 85%;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: var(--border-radius-small);
+  background-color: var(--gray-light);
+}
+
+a.badge:hover,
+a.badge:focus {
+  text-decoration: none;
+}
+
+.badge-primary {
+  color: var(--white);
+  background-color: var(--primary);
+}
+
+.progress-bar-container {
+  display: flex;
+  height: 0.5rem;
+  font-size: 75%;
+  background-color: #e9ecef;
+  border-radius: 0.25rem;
+
+  .progress-bar {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    background-color: var(--primary);
+    transition: width 0.6s ease;
+    border-radius: 0.25rem;
+  }
+}
+
 .scrollbar {
   scrollbar-width: thin;
   scrollbar-color: var(--gray-medium) var(--white);
@@ -221,3 +265,30 @@ code {
   align-items: center;
   height: 100%;
 }
+
+/*******
+**********
+          Breakpoints
+**********
+****** */
+
+$bp-xsmall: 30rem; // 468px
+$bp-small: 48rem; // 768px
+$bp-medium: 62rem; // 992px
+$bp-large: 75rem; // 1200px
+$bp-xlarge: 112.5rem; // 1800px
+$bp-xxlarge: 150rem; // 2400px
+
+// (default)                                 Mobile-poroutcome
+$mq-max-xsmall: "(max-width: #{$bp-xsmall})"; // Mobile-landscape (and larger)
+$mq-max-small: "(max-width: #{$bp-small})";   // Tablet-poroutcome (and larger)
+$mq-max-medium: "(max-width: #{$bp-medium})"; // Tablet-landscape (and larger)
+$mq-max-large: "(max-width: #{$bp-large})";   // Laptops
+$mq-max-xlarge: "(max-width: #{$bp-xlarge})";   // 
+
+$mq-min-xsmall: "(min-width: #{$bp-xsmall})"; // Mobile-landscape (and larger)
+$mq-min-small: "(min-width: #{$bp-small})";   // Tablet-poroutcome (and larger)
+$mq-min-medium: "(min-width: #{$bp-medium})"; // Tablet-landscape (and larger)
+$mq-min-large: "(min-width: #{$bp-large})";   // Laptops
+$mq-min-xlarge: "(min-width: #{$bp-xlarge})"; // Anything larger than laptop
+$mq-min-xxlarge: "(min-width: #{$bp-xxlarge})"; // Super wide screen

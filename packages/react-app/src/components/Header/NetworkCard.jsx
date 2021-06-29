@@ -52,7 +52,7 @@ const NetworkCard = ({
 
     return (
         <div 
-            className="network-card" 
+            className="network-card badge" 
             style={cssProperty}>
             {networkDisplay}
         </div>

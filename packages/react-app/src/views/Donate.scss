@@ -1,0 +1,43 @@
+.donate-page {
+    padding-top: 2.5rem;
+
+    .filters-column {
+        
+    }
+    .campaign-list-column {
+        width: 45rem;
+        max-width: 100%;
+
+        .search-campaign-list {
+            display: inline-block;
+            padding: 0.7rem 1rem 0.7rem 2.5rem;
+            margin-bottom: 1.5rem;
+            background: var(--primary-light);
+            border-radius: var(--border-radius);
+            width: 100%;
+            border: 2px solid transparent;
+            outline: 0;
+            transition: width 0.4s ease-in-out, border 0.3s ease-in-out;
+
+            &::placeholder {
+                font-weight: bold;
+            }
+
+            &:focus {
+                width: 100%;
+                border-color: var(--primary);
+            }
+
+            &.search-icon {
+                background-image: url('../assets/search.svg');
+                background-repeat: no-repeat;
+                background-position: .8rem 50%;
+                background-size: 1.1rem;
+            }
+        }
+
+        .donate-list-item:not(:last-of-type) {
+            margin-bottom: 2rem;
+        }
+    }
+}

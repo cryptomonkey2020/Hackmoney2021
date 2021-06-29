@@ -1,0 +1,71 @@
+.donate-list-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--gray-light-2);
+    border-radius: 0.8rem;
+
+    .cover-image {
+        width: 16rem;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding-top: calc(0.35 * 100%);
+        border-radius: 0.8rem;
+    }
+    .details {
+        padding: 1.5rem 1.8rem;
+        flex: 1;
+        text-align: left;
+        
+        .category {
+            font-size: 92%;
+        }
+        .name {
+            font-weight: bold;
+            font-size: 130%;
+
+            a {
+                color: #000;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+        .organisation {
+            margin-bottom: .6rem;
+
+            a {
+                color: var(--gray-medium);
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+        .goal-and-donate-row {
+            display: flex;
+            justify-content: space-between;
+
+            .progress-values {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                margin-bottom: .3rem;
+
+                .raised {
+                    font-size: 125%;
+                    color: var(--primary-medium);
+                    margin-right: .5rem;
+                    font-weight: bold;
+                    margin-right: .8rem;
+                }
+                .goal {
+                    font-size: 92%;
+                    color: var(--gray-light-4);
+                }
+            }
+        }
+    }
+}
