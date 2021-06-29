@@ -6,9 +6,11 @@ import animals from "../assets/animals.jpg";
 
 const { Content } = Layout;
 
-export default function Donate() {
+const Donate = () => {
+
   return (
-    <>
+    <div className="donate">
+      
       <Layout>
         <Content>
           <h1>Please select the organization you want to donate to.</h1>
@@ -42,6 +44,8 @@ export default function Donate() {
           </Card>
         </Content>
       </Layout>
-    </>
+    </div>
   );
 }
+
+export default Donate
