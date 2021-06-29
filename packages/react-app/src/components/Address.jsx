@@ -3,6 +3,7 @@ import React from "react";
 import Blockies from "react-blockies";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { useLookupAddress } from "../hooks";
+import { shortenAddress } from "../utils";
 
 // changed value={address} to address={address}
 
@@ -49,7 +50,8 @@ export default function Address(props) {
     );
   }
 
-  let displayAddress = address.substr(0, 6);
+  // let displayAddress = address.substr(0, 6);
+  let displayAddress = shortenAddress(address)
 
   if (ens && ens.indexOf("0x") < 0) {
     displayAddress = ens;
@@ -78,7 +80,7 @@ export default function Address(props) {
   let text;
   if (props.onChange) {
     text = (
-      <Text editable={{ onChange: props.onChange }} copyable={{ text: address }}>
+      <Text editable={{ onChange: props.onChange }}>
         <a
           style={{ color: currentTheme === "light" ? "#222222" : "#ddd" }}
           target="_blank"
@@ -91,7 +93,7 @@ export default function Address(props) {
     );
   } else {
     text = (
-      <Text copyable={{ text: address }}>
+      <Text>
         <a
           style={{ color: currentTheme === "light" ? "#222222" : "#ddd" }}
           target="_blank"

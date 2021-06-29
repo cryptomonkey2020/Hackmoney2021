@@ -1,15 +1,15 @@
 import { StaticJsonRpcProvider, Web3Provider } from "@ethersproject/providers";
 import { formatEther, parseEther } from "@ethersproject/units";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import { Alert, Button, Col, Menu, Row } from "antd";
+import { Button, Menu } from "antd";
 import "antd/dist/antd.css";
 import { useUserAddress } from "eth-hooks";
 import React, { useCallback, useEffect, useState } from "react";
-import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Link, Route, Switch, Redirect } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
 import { Contract, Header, ThemeSwitch, Lend } from "./components";
-import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORK, NETWORKS } from "./constants";
+import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
 import {
   useBalance,
@@ -180,52 +180,6 @@ function App(props) {
     mainnetDAIContract,
   ]);
 
-  let networkDisplay = "";
-  if (localChainId && selectedChainId && localChainId !== selectedChainId) {
-    const networkSelected = NETWORK(selectedChainId);
-    const networkLocal = NETWORK(localChainId);
-    if (selectedChainId === 1337 && localChainId === 31337) {
-      networkDisplay = (
-        <div style={{ zIndex: 2, position: "absolute", right: 0, top: 60, padding: 16 }}>
-          <Alert
-            message="⚠️ Wrong Network ID"
-            description={
-              <div>
-                You have <b>chain id 1337</b> for localhost and you need to change it to <b>31337</b> to work with
-                HardHat.
-                <div>(MetaMask -&gt; Settings -&gt; Networks -&gt; Chain ID -&gt; 31337)</div>
-              </div>
-            }
-            type="error"
-            closable={false}
-          />
-        </div>
-      );
-    } else {
-      networkDisplay = (
-        <div style={{ zIndex: 2, position: "absolute", right: 0, top: 60, padding: 16 }}>
-          <Alert
-            message="⚠️ Wrong Network"
-            description={
-              <div>
-                You have <b>{networkSelected && networkSelected.name}</b> selected and you need to be on{" "}
-                <b>{networkLocal && networkLocal.name}</b>.
-              </div>
-            }
-            type="error"
-            closable={false}
-          />
-        </div>
-      );
-    }
-  } else {
-    networkDisplay = (
-      <div style={{ zIndex: -1, position: "absolute", right: 154, top: 28, padding: 16, color: targetNetwork.color }}>
-        {targetNetwork.name}
-      </div>
-    );
-  }
-
   const loadWeb3Modal = useCallback(async () => {
     const provider = await web3Modal.connect();
     setInjectedProvider(new Web3Provider(provider));
@@ -275,72 +229,29 @@ function App(props) {
   return (
     <div className="App">
 
-      <Header 
-        address={address}
-        localProvider={localProvider}
-        userProvider={userProvider}
-        mainnetProvider={mainnetProvider}
-        price={price}
-        web3Modal={web3Modal}
-        loadWeb3Modal={loadWeb3Modal}
-        logoutOfWeb3Modal={logoutOfWeb3Modal}
-        blockExplorer={blockExplorer}
-        faucetHint={faucetHint}
-      />
-
-      {networkDisplay}
-
       <BrowserRouter>
-        <Menu style={{ textAlign: "center" }} selectedKeys={[route]} mode="horizontal">
-          <Menu.Item key="/">
-            <Link
-              onClick={() => {
-                setRoute("/");
-              }}
-              to="/"
-            >
-              Home
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/deposit">
-            <Link
-              onClick={() => {
-                setRoute("/deposit");
-              }}
-              to="/deposit"
-            >
-              Deposit
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/donate">
-            <Link
-              onClick={() => {
-                setRoute("/donate");
-              }}
-              to="/donate"
-            >
-              Donate
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/lending">
-            <Link
-              onClick={() => {
-                setRoute("/lending");
-              }}
-              to="/lending"
-            >
-              Lend (Aave)
-            </Link>
-          </Menu.Item>
-        </Menu>
+
+        <Header 
+          address={address}
+          web3Modal={web3Modal}
+          loadWeb3Modal={loadWeb3Modal}
+          logoutOfWeb3Modal={logoutOfWeb3Modal}
+          faucetHint={faucetHint}
+          targetNetwork={targetNetwork}
+          localChainId={localChainId}
+          selectedChainId={selectedChainId}
+        />
 
         <Switch>
-          <Route exact path="/deposit">
+          <Route exact path="/dev-tools">
             <TestFaucet 
               address={address}
               selectedProvider={userProvider}
               tx={tx}
               writeContracts={writeContracts} />
+
+            <Lend selectedProvider={userProvider} ethPrice={price} />
+
             <Contract
               name="Donation"
               signer={userProvider && userProvider.getSigner()}
@@ -350,8 +261,8 @@ function App(props) {
             />
           </Route>
 
-          <Route path="/">
-            <MainPage />
+          <Route exact path="/">
+            <Redirect to="/donate" />
           </Route>
 
           <Route path="/donate">
@@ -365,10 +276,6 @@ function App(props) {
               mainnetProvider={mainnetProvider}
               price={price}
             />
-          </Route>
-
-          <Route path="/lending">
-            <Lend selectedProvider={userProvider} ethPrice={price} />
           </Route>
 
           <Route path="/exampleui">

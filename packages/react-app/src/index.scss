@@ -1,0 +1,223 @@
+@import '~bootstrap/dist/css/bootstrap-grid.min.css';
+
+:root {
+  --primary: #FFC049;
+  --primary-hover: #ffcf76;
+  --primary-light: #FFF6E5;
+  --primary-light-hover: #ffebc6;
+
+  --success-bg: #38a534;
+  --success-bg-hover: #4ebd4b;
+  --success-bg-light: #c1eec0;
+  --success-text: #134912;
+  --success-light: #e4f5e3;
+  --warning-bg: #ffc107;
+  --warning-bg-light: #fceec5;
+  --warning-text: #d3a007;
+  --warning-light-bg: #fffae6;
+  --warning-light-text: #b67513;
+  --error-bg: #ffecec;
+  --error-bg-hover: #ffc7c7;
+  --error-text: #e63a3a;
+  --error-text-2: #ad1414;
+  --blue: #2172e5;
+  --green: #00DB8B;
+
+  --white: #fff;
+  --black: #000;
+  --gray-light: #f8f9fa;
+  --gray-light-hover: #e3e6e9;
+  --gray-light-2: #edf1f5;
+  --gray-light-3: #e9edf1;
+  --gray-light-4: #b8b8b8;
+  --gray-light-5: #ced4da;
+  --gray-light-6: #cbcbcb;
+  --gray-medium: #979797;
+  --gray-medium-2: #616161;
+  --gray-dark: #343a40;
+  --gray-dark_rgb: 52, 58, 64;
+  --yellow: #fff23d;
+  --orange: #ffaf1b;
+
+  --zindex-dropdown: 1000;
+  --zindex-sticky: 1020;
+  --zindex-fixed: 1030;
+  --zindex-modal-backdrop: 1040;
+  --zindex-modal: 1050;
+  --zindex-popover: 1060;
+  --zindex-tooltip: 1070;
+
+  --cubic-bezier-default: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --cubic-bezier-easeInOutCubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --box-shadow-high-dark-1: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  --box-shadow-high-light-1: 0 14px 28px rgba(161, 161, 161, 0.25), 0 10px 10px rgba(161, 161, 161, 0.22);
+  --box-shadow-low-light-1: 0 2px 3px rgba(161, 161, 161, 0.25), 0 5px 5px rgba(161, 161, 161, 0.22);
+  --box-shadow-low-light-2: 0 0.5rem 1.2rem rgba(188,188,188,.2);
+  --btn-box-shadow: 0 .2rem 0 rgba(0,0,0,.03);
+
+  --border-radius: 0.45rem;
+  --border-radius-small: 0.25rem;
+  --border-radius-big: 1.2rem;
+
+  --body-font: -apple-system, BlinkMacSystemFont, "Noto Sans", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+body {
+  margin: 0;
+  font-family: var(--body-font);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.btn {
+  position: relative;
+  display: inline-block;
+  font-weight: 400;
+  color: #212529;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: 0.375rem 1rem;
+  line-height: 1.5;
+  border-radius: var(--border-radius);
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+
+  a {
+    text-decoration: none;
+    color: #212529;
+  }
+
+  &:hover .badge {
+    filter: brightness(1.3);
+  }
+
+  &.bold {
+    border-width: 0.1rem;
+    font-weight: 700;
+  }
+
+  &:hover:not(:disabled) {
+    color: #212529;
+    text-decoration: none;
+  }
+
+  &:focus,
+  &.focus {
+    outline: 0;
+    box-shadow: none;
+  }
+
+  &.disabled,
+  &:disabled {
+    opacity: 0.65;
+    cursor: auto;
+  }
+
+  &:not(:disabled):not(.disabled) {
+    cursor: pointer;
+  }
+}
+
+.btn-primary {
+  color: #000;
+  background-color: var(--primary);
+  border-color: var(--primary);
+  font-weight: bold;
+
+  a {
+    color: #000;
+  }
+
+  &:not(:disabled):hover,
+  &:not(:disabled):focus,
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled):active:focus {
+    color: #000;
+    border-color: var(--primary);
+    background-color: var(--primary-hover);
+  }
+}
+
+.btn-primary-light {
+  color: #000;
+  border-color: none;
+  background-color: var(--primary-light);
+
+  &:not(:disabled):hover,
+  &:not(:disabled):focus,
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled):active:focus {
+    color: #000;
+    border-color: none;
+    background-color: var(--primary-light-hover);
+  }
+}
+
+.btn-outline-primary {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: var(--primary-light);
+
+  &:not(:disabled):hover,
+  &:not(:disabled):focus,
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled):active:focus {
+    color: var(--primary);
+    border-color: var(--primary);
+    background-color: var(--primary-light-hover-2);
+  }
+}
+
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-medium) var(--white);
+
+  &::-webkit-scrollbar {
+    width: 13px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--white);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--gray-medium);
+    border-radius: 6px;
+    border: 3px solid var(--white);
+  }
+
+  &.thin-horizontal {
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+  }
+
+  &.on-white {
+    &::-webkit-scrollbar-track {
+      background: var(--gray-light-2);
+    }
+    &::-webkit-scrollbar-thumb {
+      border-color: var(--gray-medium);
+    }
+  }
+
+  @media print {
+    overflow: visible !important;
+  }
+}
+
+.inline-flex-item-fill-height {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+}

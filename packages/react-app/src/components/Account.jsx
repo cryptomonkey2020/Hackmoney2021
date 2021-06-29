@@ -104,7 +104,7 @@ export default function Account({
   );
 
   return (
-    <div>
+    <div className="d-inline-block">
       {display}
       {modalButtons}
     </div>
