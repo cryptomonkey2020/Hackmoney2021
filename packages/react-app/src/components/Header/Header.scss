@@ -11,11 +11,12 @@
             height: 100%;
 
             a {
-                font-weight: bold;
+                font-weight: 500;
                 color: #000;
                 padding: 0.375rem 1rem;
                 border-radius: var(--border-radius);
                 background: var(--primary-light);
+                text-decoration: none;
 
                 &:hover:not(.active) {
                     background: var(--primary-light-hover);
@@ -41,6 +42,11 @@
             border-radius: var(--border-radius);
             background: var(--gray-light);
             border: 2px solid transparent;
+            text-decoration: none;
+
+            a {
+                pointer-events: none;
+            }
 
             &:hover {
                 border-color: var(--gray-medium-2);

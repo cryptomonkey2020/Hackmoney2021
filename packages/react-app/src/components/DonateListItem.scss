@@ -1,18 +1,18 @@
 .donate-list-item {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     border: 1px solid var(--gray-light-2);
-    border-radius: 0.8rem;
+    border-radius: var(--border-radius-medium);
 
     .cover-image {
-        width: 16rem;
+        width: 33%;
+        min-height: 10rem;
         overflow: hidden;
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        padding-top: calc(0.35 * 100%);
-        border-radius: 0.8rem;
+        border-radius: var(--border-radius-medium);
     }
     .details {
         padding: 1.5rem 1.8rem;
@@ -33,7 +33,13 @@
                 }
             }
         }
+        .description {
+            .read-or-hide {
+                font-style: italic;
+            }
+        }
         .organisation {
+            font-size: 92%;
             margin-bottom: .6rem;
 
             a {
@@ -63,8 +69,11 @@
                 }
                 .goal {
                     font-size: 92%;
-                    color: var(--gray-light-4);
+                    color: var(--gray-medium);
                 }
+            }
+            .btn {
+                align-self: center;
             }
         }
     }

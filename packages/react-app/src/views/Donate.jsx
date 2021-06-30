@@ -1,15 +1,96 @@
 import React, { useState } from "react";
 import DonateListItem from '../components/DonateListItem'
+import { CAUSE_FILTERS } from '../constants'
 import "./Donate.scss"
+
+const STATUS_FILTERS = ['Ongoing', 'Closed']
 
 const Donate = ({ organisations = dummyOrganisations }) => {
 
-  const [causeFilters, setCauseFilters] = useState()
+  const [activeFilters, setActiveFilters] = useState(["Ongoing"])
+
+  const removeFromActiveFilters = (name) => {
+    setActiveFilters(activeFilters.filter(a => a === name))
+  }
+  const addToActiveFilters = (name) => {
+    let _activeFilters = [...activeFilters]
+    _activeFilters.push(name)
+    setActiveFilters(_activeFilters)
+  }
 
   return (
     <div className="donate-page">
-      <div className="container">
-        <div className="filter-column">
+      {/* 
+        Header 
+      */}
+      <div className="donate-page-header">
+        <div className="title">
+          <div className="quote">“Alone we can do so little, together we can do so much”</div>
+          <div className="author">- Helen Keller</div></div>
+        <div className="background"></div>
+      </div>
+
+      {/* 
+        Body 
+      */}
+      <div className="donate-page-body container">
+        <div className="filters-column">
+
+          <div className="header">
+            <span>Filter by</span>
+            <a className="clear-all" onClick={() => setActiveFilters([])}>Clear all</a>
+          </div>
+          
+          {/* 
+            Causes Filters
+          */}
+          <section>
+            <div className="section-title">Causes</div>
+
+            {CAUSE_FILTERS && CAUSE_FILTERS.map((cause, i) => (
+              <div className="checkbox filter-item" key={cause.name || i}>
+                  <input
+                      type="checkbox"
+                      className="checkbox-input"
+                      id={`filter-${cause.name || i}`}
+                      checked={activeFilters.find(f => f === cause.name)}
+                      onChange={(e) => e.target.checked 
+                        ? addToActiveFilters(e.target.id) 
+                        : removeFromActiveFilters(e.target.id)} />
+                  <label
+                      className="checkbox-label"
+                      htmlFor={`filter-${cause.name || i}`}>
+                      {cause.name} <span className="icon">{cause.icon}</span>
+                  </label>
+              </div>
+            ))}
+          </section>
+          
+
+          {/* 
+            Status Filters
+          */}
+          <section>
+            <div className="section-title">Status</div>
+
+            {STATUS_FILTERS.map((status, i) => (
+              <div className="checkbox filter-item" key={status || i}>
+                  <input
+                      type="checkbox"
+                      className="checkbox-input"
+                      id={`filter-${status || i}`}
+                      checked={activeFilters.find(f => f === status)}
+                      onChange={(e) => e.target.checked 
+                        ? addToActiveFilters(e.target.id) 
+                        : removeFromActiveFilters(e.target.id)} />
+                  <label
+                      className="checkbox-label"
+                      htmlFor={`filter-${status || i}`}>
+                      {status}
+                  </label>
+              </div>
+            ))}
+        </section>
 
         </div>
 

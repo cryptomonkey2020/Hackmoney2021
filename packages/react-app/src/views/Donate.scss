@@ -1,43 +1,132 @@
 .donate-page {
-    padding-top: 2.5rem;
 
-    .filters-column {
-        
-    }
-    .campaign-list-column {
-        width: 45rem;
-        max-width: 100%;
+    .donate-page-header {
+        position: relative;
+        height: 20rem;
+        color: #fff;
+        font-weight: 500;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
 
-        .search-campaign-list {
-            display: inline-block;
-            padding: 0.7rem 1rem 0.7rem 2.5rem;
-            margin-bottom: 1.5rem;
-            background: var(--primary-light);
-            border-radius: var(--border-radius);
-            width: 100%;
-            border: 2px solid transparent;
-            outline: 0;
-            transition: width 0.4s ease-in-out, border 0.3s ease-in-out;
-
-            &::placeholder {
-                font-weight: bold;
-            }
-
-            &:focus {
-                width: 100%;
-                border-color: var(--primary);
-            }
-
-            &.search-icon {
-                background-image: url('../assets/search.svg');
-                background-repeat: no-repeat;
-                background-position: .8rem 50%;
-                background-size: 1.1rem;
-            }
+        .quote {
+            display: block;
+            font-size: 180%;
         }
 
-        .donate-list-item:not(:last-of-type) {
-            margin-bottom: 2rem;
+        .author {
+            display: block;
+            margin-top: .5rem;
+            font-size: 110%;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-light) url('../assets/underwater.jpg') center center / cover no-repeat;
+            filter: grayscale(25%) blur(1.5px);
+            z-index: -1;
+        }
+    }
+
+    .donate-page-body {
+        position: relative;
+        display: flex;
+        padding: 2.5rem 0;
+        justify-content: space-between;
+        width: 58rem;
+        max-width: 100%;
+        margin: 0 auto;
+
+        .filters-column {
+            position: sticky;
+            top: 1rem;
+            align-self: flex-start;
+            flex: 0 0 15rem;
+            padding-right: 2.5rem;
+            text-align: left;
+
+            section {
+                margin-bottom: 1.5rem;
+            }
+
+            .header {
+                display: flex;
+                justify-content: space-between;
+                font-weight: 500;
+                padding: 0;
+                margin-bottom: 1.5rem;
+
+                a {
+                    color: var(--gray-light-4);
+                    text-transform: uppercase;
+                    letter-spacing: 0.05rem;
+                    font-size: 90%;
+                }
+            }
+
+            .section-title {
+                text-transform: uppercase;
+                letter-spacing: 0.05rem;
+                border-bottom: 1px solid var(--gray-light-4);
+                padding-bottom: 0.5rem;
+                margin-bottom: 0.5rem;
+                font-size: 90%;
+            }
+
+            .filter-item {
+                margin-bottom: 0.6rem;
+
+                .checkbox-input {
+                    &:checked ~ .checkbox-label {
+                        font-weight: 500;
+                    }
+                }
+
+                .icon {
+                    margin-left: 0.2rem;
+                }
+            }
+        }
+        .campaign-list-column {
+            width: 45rem;
+            max-width: 100%;
+
+            .search-campaign-list {
+                display: inline-block;
+                padding: 0.7rem 1rem 0.7rem 2.5rem;
+                margin-bottom: 1.5rem;
+                background: var(--primary-light);
+                border-radius: var(--border-radius);
+                width: 100%;
+                border: 2px solid transparent;
+                outline: 0;
+                transition: width 0.4s ease-in-out, border 0.3s ease-in-out;
+
+                &::placeholder {
+                    font-weight: 500;
+                }
+
+                &:focus {
+                    width: 100%;
+                    border-color: var(--primary);
+                }
+
+                &.search-icon {
+                    background-image: url("../assets/search.svg");
+                    background-repeat: no-repeat;
+                    background-position: 0.8rem 50%;
+                    background-size: 1.1rem;
+                }
+            }
+
+            .donate-list-item:not(:last-of-type) {
+                margin-bottom: 2rem;
+            }
         }
     }
 }

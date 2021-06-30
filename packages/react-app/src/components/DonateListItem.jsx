@@ -26,7 +26,7 @@ const DonateListItem = ({
                 </div>
                 <div className="description">
                     <p>
-                        {description ? description.slice(0, 150) : description}
+                        {description ? description.slice(0, 130) : description}
                         {"... "}
                         <Link to={`/campaign/${id}`} className="read-or-hide">
                             read more

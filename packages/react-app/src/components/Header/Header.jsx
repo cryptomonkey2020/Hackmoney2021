@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import Logo from '../Logo'
 
 import Address from '../Address'
@@ -40,9 +40,10 @@ export default function Header({
               />
 
             <div className="address-container">
-              {address 
-                  ? <div className="address"><Address address={address} fontSize={17} /></div>
-                  : "Connecting..."
+              {address && 
+                <Link to="/profile" className="address">
+                  <Address address={address} fontSize={17} />
+                </Link>
               }
             </div>
 
