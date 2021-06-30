@@ -8,7 +8,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Switch, Redirect } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
-import { Contract, Header, ThemeSwitch, Lend, Superfluid } from "./components";
+import { Contract, Header, ThemeSwitch, Lend } from "./components";
 import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
 import {
@@ -23,7 +23,7 @@ import {
   useUserProvider,
 } from "./hooks";
 // import Hints from "./Hints";
-import { ExampleUI, Hints, Subgraph, MainPage, Donate, TestFaucet } from "./views";
+import { ExampleUI, Hints, Subgraph, MainPage, Donate, TestFaucet, Org1 } from "./views";
 /*
     🌏 EXTERNAL CONTRACTS:
     You can also bring in contract artifacts in `constants.js`
@@ -228,8 +228,6 @@ function App(props) {
 
   return (
     <div className="App">
-
-      <Superfluid />
 
       <BrowserRouter>
 
