@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import Select from "react-select";
 import Superfluid from "../components/SuperFluid/Superfluid";
-import { Form, Input } from "antd";
+import { Form, Input, Radio } from "antd";
 
 
 export default function Campaigns1({ address, userProvider }) {
-  const [flow, setFlow] = useState();
+  const [flow, setFlow] = useState("minute");
   const [amount, setAmount] = useState();
+  const [orgAddress, setOrgAddress] = useState();
 
 
   const flowAmount = (e) => {
@@ -17,6 +17,10 @@ export default function Campaigns1({ address, userProvider }) {
     setAmount(e.target.value);
   }
 
+  const org = (e) => {
+    setOrgAddress(e.target.value);
+  }
+
   return (
     <>
 <Form labelCol={{ span: 4 }}
@@ -25,6 +29,12 @@ export default function Campaigns1({ address, userProvider }) {
         <Form.Item label="Your Address">
           <h2>{ address }</h2>
           </Form.Item>
+        <Form.Item label="Organization Address">
+          <Input
+            onChange={org}
+            value={orgAddress}
+          />
+          </Form.Item>
           <Form.Item label="Amount To Stream">
             <Input
               value={amount}
@@ -32,16 +42,16 @@ export default function Campaigns1({ address, userProvider }) {
             />
           </Form.Item>
           <Form.Item label="Rate">
-          <select
+          <Radio.Group
               name="rate"
               value={ flow }
-              onSelect={ flowAmount }
+              onValuesChange={ flowAmount }
           >
-            <option value="minute">Minute</option>
-            <option value="hour">Hour</option>
-            <option value="day">Day</option>
-            <option value="month">Month</option>
-          </select>
+            <Radio.Button value="minute">Minute</Radio.Button>
+            <Radio.Button value="hour">Hour</Radio.Button>
+            <Radio.Button value="day">Day</Radio.Button>
+            <Radio.Button value="month">Month</Radio.Button>
+          </Radio.Group>
           </Form.Item>
       </Form>
 
@@ -49,7 +59,8 @@ export default function Campaigns1({ address, userProvider }) {
       address={ address }
         signer={ userProvider && userProvider.getSigner() }
         rateOfFlow={ flow }
-        amountDonated={amount}
+        amountDonated={ amount }
+        org={orgAddress}
       />
     </>
   );
