@@ -8,7 +8,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Link, Route, Switch, Redirect } from "react-router-dom";
 import Web3Modal from "web3modal";
 import "./App.css";
-import { Contract, Header, ThemeSwitch, Lend } from "./components";
+import { Contract, Header, ThemeSwitch, Lend, Superfluid } from "./components";
 import { DAI_ABI, DAI_ADDRESS, INFURA_ID, NETWORKS } from "./constants";
 import { Transactor } from "./helpers";
 import {
@@ -228,6 +228,8 @@ function App(props) {
 
   return (
     <div className="App">
+
+      <Superfluid />
 
       <BrowserRouter>
 
