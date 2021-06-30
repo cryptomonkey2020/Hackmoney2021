@@ -3,7 +3,7 @@ import testTokenAbi from "./abi/testToken.json";
 import { Button, Form } from "antd";
 
 
-export default function Superfluid({ address, signer, rateOfFLow, amountDonated }) {
+export default function Superfluid({ address, org, rateOfFLow, amountDonated }) {
   // const [flow, setFlow] = useState();
 
   const SuperfluidSDK = require("@superfluid-finance/js-sdk");
@@ -12,7 +12,8 @@ export default function Superfluid({ address, signer, rateOfFLow, amountDonated 
   var web3 = new Web3(Web3.givenProvider);
 
   const fUSDCxAddress = "0x25b5cd2e6ebaedaa5e21d0ecf25a567ee9704aa7";
-  const recipientAddress = "0x2880627569ffA41965536CE20B0596009eDfA744";
+  const recipientAddress = org;
+  console.log(recipientAddress);
   const amount = amountDonated;
   const rateName = rateOfFLow;
   console.log(rateName);

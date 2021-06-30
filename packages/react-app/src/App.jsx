@@ -272,7 +272,7 @@ function App(props) {
           <Route path="/stream">
             <Campaigns
               address={ address }
-              signer={userProvider && userProvider.getSigner()}
+              signer={userProvider}
               provider={localProvider}
             />
           </Route>
