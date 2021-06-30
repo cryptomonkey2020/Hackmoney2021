@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import Select from "react-select";
 import Superfluid from "../components/SuperFluid/Superfluid";
-import { Form, Input } from "antd";
+import { Form, Input, Select } from "antd";
 
 
 export default function Campaigns1({ address, userProvider }) {
-  const [flow, setFlow] = useState();
+  const [flow, setFlow] = useState("minute");
   const [amount, setAmount] = useState();
 
 
   const flowAmount = (e) => {
-    setFlow(e.target.value);
+    setFlow(e.target.textContent);
   }
 
   const donateAmount = (e) => {
@@ -32,16 +31,16 @@ export default function Campaigns1({ address, userProvider }) {
             />
           </Form.Item>
           <Form.Item label="Rate">
-          <select
+          <Select
               name="rate"
               value={ flow }
-              onSelect={ flowAmount }
+              onChange={ flowAmount }
           >
-            <option value="minute">Minute</option>
-            <option value="hour">Hour</option>
-            <option value="day">Day</option>
-            <option value="month">Month</option>
-          </select>
+            <Select.Option value="minute">Minute</Select.Option>
+            <Select.Option value="hour">Hour</Select.Option>
+            <Select.Option value="day">Day</Select.Option>
+            <Select.Option value="month">Month</Select.Option>
+          </Select>
           </Form.Item>
       </Form>
 
