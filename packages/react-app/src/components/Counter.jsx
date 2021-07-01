@@ -1,10 +1,10 @@
-import React from "react"
+import React, {useState, useRef} from "react"
 import useOdometer from 'use-odometer';
 
 const Counter = ({initialValue, rate}) => {
-    const [count,setCount] = React.useState(initialValue)
+    const [count,setCount] = useState(initialValue)
     
-    const targetRef = React.useRef(null);
+    const targetRef = useRef(null);
     useOdometer(targetRef, count, {
         format: "(,ddd).dddd"
     });

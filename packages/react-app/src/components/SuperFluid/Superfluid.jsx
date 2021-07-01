@@ -1,6 +1,7 @@
 import React from "react";
 import testTokenAbi from "./abi/testToken.json";
 import { Button, Form } from "antd";
+import Counter from "../Counter";
 
 
 export default function Superfluid({ address, amountDonated }) {
@@ -88,5 +89,6 @@ export default function Superfluid({ address, amountDonated }) {
      <Form.Item>
             <Button className="btn btn-primary-light" onClick={ startTransfer }>Give ❤️</Button>
     </Form.Item>
+    <Counter />
   </>;
 }
