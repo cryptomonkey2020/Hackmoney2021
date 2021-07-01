@@ -4,7 +4,7 @@ import { Form, Input, Radio } from "antd";
 
 
 export default function Campaigns1({ address, userProvider }) {
-  const [flow, setFlow] = useState("minute");
+  const [flow, setFlow] = useState();
   const [amount, setAmount] = useState();
   const [orgAddress, setOrgAddress] = useState();
 
@@ -45,7 +45,7 @@ export default function Campaigns1({ address, userProvider }) {
           <Radio.Group
               name="rate"
               value={ flow }
-              onValuesChange={ flowAmount }
+              onChange={ flowAmount }
           >
             <Radio.Button value="minute">Minute</Radio.Button>
             <Radio.Button value="hour">Hour</Radio.Button>

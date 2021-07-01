@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import testTokenAbi from "./abi/testToken.json";
 import { Button, Form } from "antd";
 
 
 export default function Superfluid({ address, org, rateOfFLow, amountDonated }) {
-  // const [flow, setFlow] = useState();
 
   const SuperfluidSDK = require("@superfluid-finance/js-sdk");
   const { Web3Provider } = require("@ethersproject/providers");
@@ -13,8 +12,9 @@ export default function Superfluid({ address, org, rateOfFLow, amountDonated }) 
 
   const fUSDCxAddress = "0x25b5cd2e6ebaedaa5e21d0ecf25a567ee9704aa7";
   const recipientAddress = org;
-  console.log(recipientAddress);
+  // console.log(org);
   const amount = amountDonated;
+  // console.log(amount);
   const rateName = rateOfFLow;
   console.log(rateName);
 
