@@ -20,7 +20,7 @@ const Counter = ({initialValue, rate}) => {
 
     return (
         <>
-            Animated: <p className="target" ref={targetRef} />
+            Donation Streamming: <p className="target" ref={targetRef} />
         </>
     )
 }
