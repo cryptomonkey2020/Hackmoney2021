@@ -86,7 +86,7 @@ export default function Superfluid({ address, amountDonated }) {
 
   return <>
      <Form.Item>
-            <Button className="btn btn-primary-light" onClick={ startTransfer }>Start Donation Flow</Button>
+            <Button className="btn btn-primary-light" onClick={ startTransfer }>Give ❤️</Button>
     </Form.Item>
   </>;
 }
