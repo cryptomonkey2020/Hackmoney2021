@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Superfluid from "../components/SuperFluid/Superfluid";
-import { Form, Input } from "antd";
+import { Form, Input, Space } from "antd";
 
 export default function Campaigns1({ address }) {
   const [amount, setAmount] = useState();
@@ -12,15 +12,13 @@ export default function Campaigns1({ address }) {
 
   return (
     <>
-      <Form labelCol={{ span: 4 }} wrapperCol={{ span: 6 }} layout="horizontal">
-        <Form.Item label="Amount To Stream">
-          <Input value={amount} onChange={donateAmount} />
-        </Form.Item>
-        <Form.Item>
-          <h3>Rate: Monthly</h3>
-        </Form.Item>
-      </Form>
-
+      <Space align="center">
+        <Form labelCol={{ span: 16 }} wrapperCol={{ span: 4 }} layout="horizontal">
+          <Form.Item label="Amount To Stream Monthly $(USDC)">
+            <Input value={amount} onChange={donateAmount} />
+          </Form.Item>
+        </Form>
+      </Space>
       <Superfluid address={address} amountDonated={amount} />
     </>
   );

@@ -3,9 +3,7 @@ import testTokenAbi from "./abi/testToken.json";
 import { Button, Form } from "antd";
 import Counter from "../Counter";
 
-
 export default function Superfluid({ address, amountDonated }) {
-
   const SuperfluidSDK = require("@superfluid-finance/js-sdk");
   const { Web3Provider } = require("@ethersproject/providers");
   var Web3 = require("web3");
@@ -15,7 +13,6 @@ export default function Superfluid({ address, amountDonated }) {
   const recipientAddress = ""; //Need org address for hard code
   const amount = amountDonated;
   const rateName = "month";
-
 
   function rate(_rate) {
     switch (_rate) {
@@ -36,7 +33,6 @@ export default function Superfluid({ address, amountDonated }) {
   }
 
   async function startTransfer() {
-
     const sf = new SuperfluidSDK.Framework({
       ethers: new Web3Provider(window.ethereum),
       tokens: ["fUSDC", "fUSDCx"],
@@ -82,20 +78,17 @@ export default function Superfluid({ address, amountDonated }) {
   //   await user.flow({
   //     recipient: recipientAddress,
   //     flowRate: "0",
-    // });
+  // });
   // }
 
-  return <>
-     <Form.Item>
-      <Button
-        className="btn btn-primary-light"
-        onClick={ startTransfer }>
-        Give ❤️
-      </Button>
-    </Form.Item>
-    <Counter
-      initialValue={ amount }
-      rate={rateName}
-    />
-  </>;
+  return (
+    <>
+      <Form.Item>
+        <Button className="btn btn-primary-light" onClick={startTransfer}>
+          Give ❤️
+        </Button>
+      </Form.Item>
+      <Counter initialValue={amount} rate={rateName} />
+    </>
+  );
 }

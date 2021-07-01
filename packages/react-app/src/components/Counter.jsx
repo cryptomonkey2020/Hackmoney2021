@@ -1,4 +1,4 @@
-import React, {useState, useRef} from "react"
+import React, {useState, useEffect, useRef} from "react"
 import useOdometer from 'use-odometer';
 
 const Counter = ({initialValue, rate}) => {
@@ -11,7 +11,7 @@ const Counter = ({initialValue, rate}) => {
 
     const interestEarnedIn2Seconds = rate * 2
 
-    React.useEffect(() => {
+    useEffect(() => {
         const timer = setTimeout(() => {
           setCount(count + interestEarnedIn2Seconds);
         }, 2000);
@@ -20,7 +20,8 @@ const Counter = ({initialValue, rate}) => {
 
     return (
         <>
-            Donation Streamming: <p className="target" ref={targetRef} />
+        <h4>Donation Streamming: </h4>
+        <span style={ { fontSize: 18 } }>$ <h3 className="target" ref={ targetRef } /></span>
         </>
     )
 }
