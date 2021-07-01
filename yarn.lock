@@ -20657,6 +20657,13 @@ ursa-optional@~0.10.0:
     bindings "^1.5.0"
     nan "^2.14.2"
 
+use-odometer@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/use-odometer/-/use-odometer-0.0.4.tgz#8202fb58bd1fdc80a07fb95e92202e9bae98abe1"
+  integrity sha512-ZVQNvtApNdicQyxHwcE7vv6JTNvll94P0ObUPycO/m5bdNCjGWvibKpTRId9qQLu4wVZ46qPQ8eQjyQpMg/URA==
+  dependencies:
+    prop-types "^15.7.2"
+
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
