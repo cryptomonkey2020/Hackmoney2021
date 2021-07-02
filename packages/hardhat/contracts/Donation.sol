@@ -131,6 +131,7 @@ contract Donation is Ownable {
     function withdrawInterestTest(uint _campaignId) external {
          //For now it will work with only 1 organization since the way the yeild is bearing take from cake contract
 
+        require(campaigns[_campaignId]._owner == msg.sender, "Only Organization adming can withdraw");
         uint poolInterest = 100;
         campaigns[_campaignId]._usdcBalance -= poolInterest ;
         aaveLendingPool.withdraw(address(usdc), poolInterest, address(this)); 
