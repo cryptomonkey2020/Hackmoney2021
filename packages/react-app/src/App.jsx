@@ -275,14 +275,16 @@ function App(props) {
 
           <Route exact path="/campaigns/:id">
             <Campaign
-              blockExplorer={blockExplorer} />
+              blockExplorer={ blockExplorer }
+              donorAddress={ address }
+            />
           </Route>
           
-          <Route path="/stream">
+          {/* <Route path="/stream">
             <Campaigns
               address={ address }
             />
-          </Route>
+          </Route> */}
 
           <Route path="/hints">
             <Hints
