@@ -1,13 +1,14 @@
 import React from "react";
-import testTokenAbi from "./abi/testToken.json";
 import { Button, Form } from "antd";
+import SuperfluidSDK from "@superfluid-finance/js-sdk";
+import { Web3Provider } from "@ethersproject/providers";
+import Web3 from "web3";
 import Counter from "../Counter";
+import testTokenAbi from "./abi/testToken.json";
+
+const web3 = new Web3(Web3.givenProvider);
 
 export default function Superfluid({ address, amountDonated }) {
-  const SuperfluidSDK = require("@superfluid-finance/js-sdk");
-  const { Web3Provider } = require("@ethersproject/providers");
-  var Web3 = require("web3");
-  var web3 = new Web3(Web3.givenProvider);
 
   const fUSDCxAddress = "0x25b5cd2e6ebaedaa5e21d0ecf25a567ee9704aa7";
   const recipientAddress = ""; //Need org address for hard code
