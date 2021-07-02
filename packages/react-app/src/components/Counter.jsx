@@ -1,29 +1,31 @@
-import React, {useState, useEffect, useRef} from "react"
-import useOdometer from 'use-odometer';
+import React, { useState, useEffect, useRef } from "react";
+import useOdometer from "use-odometer";
 
-const Counter = ({initialValue, rate}) => {
-    const [count,setCount] = useState(0)
-    
-    const targetRef = useRef(null);
-    useOdometer(targetRef, count, {
-        format: "(,ddd).dddd"
-    });
+const Counter = ({ initialValue, rate }) => {
+  const [count, setCount] = useState(0);
 
-    const interestEarnedIn2Seconds = rate * 2
+  const targetRef = useRef(null);
+  useOdometer(targetRef, count, {
+    format: "(,ddd).dddd",
+  });
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-          setCount(count + interestEarnedIn2Seconds);
-        }, 2000);
-        return () => clearTimeout(timer);
-    });
+  const interestEarnedIn2Seconds = rate * 2;
 
-    return (
-        <>
-            <h4 >Donation Streamming: { initialValue } %</h4>
-        <span style={ { fontSize: 16 } }>$<p className="target" ref={ targetRef } /></span>
-        </>
-    )
-}
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCount(count + interestEarnedIn2Seconds);
+    }, 2000);
+    return () => clearTimeout(timer);
+  });
 
-export default Counter
+  return (
+      <>
+      <h4>Donation Streamming at </h4>
+      <span style={{ fontSize: 16 }}>
+        $<p className="target" ref={targetRef} />
+      </span>
+    </>
+  );
+};
+
+export default Counter;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Button, Form } from "antd";
 import SuperfluidSDK from "@superfluid-finance/js-sdk";
 import { Web3Provider } from "@ethersproject/providers";
@@ -8,13 +8,13 @@ import testTokenAbi from "./abi/testToken.json";
 
 const web3 = new Web3(Web3.givenProvider);
 
-export default function Superfluid({ address, amountDonated }) {
+export default function Superfluid({ address, amountDonated, percent }) {
 
   const fUSDCxAddress = "0x25b5cd2e6ebaedaa5e21d0ecf25a567ee9704aa7";
   const recipientAddress = ""; //Need org address for hard code
-  const amount = amountDonated * 0.5;
+  const amount = amountDonated * (percent / 100);
   const rateName = "month";
-
+ 
   function rate(_rate) {
     switch (_rate) {
       case "minute":
@@ -84,11 +84,15 @@ export default function Superfluid({ address, amountDonated }) {
 
   return (
     <>
+      ${ amount } 
       <Button
         className="btn btn-primary-light"
         onClick={ startTransfer }>
         </Button>
-      <Counter initialValue={amount} rate={rateName} />
+      <Counter
+        initialValue={ amount }
+        rate={ rateName }
+      />
     </>
   );
 }
