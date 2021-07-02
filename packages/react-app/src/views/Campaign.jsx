@@ -8,6 +8,7 @@ import { Link as ScrollLink, Element, Events, animateScroll as scroll, scrollSpy
 import AnimatedNumber from "animated-number-react"
 import { useInterval } from "../hooks"
 import "./Campaign.scss"
+import Superfluid from "../components/SuperFluid/Superfluid";
 
 const { Countdown } = Statistic
 const { Step } = Steps
@@ -16,7 +17,8 @@ const { Step } = Steps
 const Campaign = ({
     organisationInfo = dummyOrganisationInfo,
     campaignInfo = dummyCampaignInfo,
-    blockExplorer
+    blockExplorer,
+    donorAddress
 }) => {
 
     useEffect(() => {
@@ -340,6 +342,11 @@ const Campaign = ({
                             <button className="btn btn-primary">
                                 Give <HeartFilled />
                             </button>
+                            <Superfluid
+                                donorAddress={ address }
+                                amountDonated={ amount }
+                            />
+                            
                         </div>
 
 

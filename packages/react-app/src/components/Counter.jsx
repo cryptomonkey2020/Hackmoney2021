@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from "react"
 import useOdometer from 'use-odometer';
 
 const Counter = ({initialValue, rate}) => {
-    const [count,setCount] = useState(initialValue)
+    const [count,setCount] = useState(0)
     
     const targetRef = useRef(null);
     useOdometer(targetRef, count, {
@@ -20,8 +20,8 @@ const Counter = ({initialValue, rate}) => {
 
     return (
         <>
-        <h4>Donation Streamming: </h4>
-        <span style={ { fontSize: 18 } }>$ <h3 className="target" ref={ targetRef } /></span>
+            <h4 >Donation Streamming: { initialValue } %</h4>
+        <span style={ { fontSize: 16 } }>$<p className="target" ref={ targetRef } /></span>
         </>
     )
 }

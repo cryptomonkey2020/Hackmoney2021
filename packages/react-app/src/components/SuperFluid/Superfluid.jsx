@@ -12,7 +12,7 @@ export default function Superfluid({ address, amountDonated }) {
 
   const fUSDCxAddress = "0x25b5cd2e6ebaedaa5e21d0ecf25a567ee9704aa7";
   const recipientAddress = ""; //Need org address for hard code
-  const amount = amountDonated;
+  const amount = amountDonated * 0.5;
   const rateName = "month";
 
   function rate(_rate) {
@@ -84,11 +84,10 @@ export default function Superfluid({ address, amountDonated }) {
 
   return (
     <>
-      <Form.Item>
-        <Button className="btn btn-primary-light" onClick={startTransfer}>
-          Give ❤️
+      <Button
+        className="btn btn-primary-light"
+        onClick={ startTransfer }>
         </Button>
-      </Form.Item>
       <Counter initialValue={amount} rate={rateName} />
     </>
   );
