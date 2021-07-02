@@ -19,7 +19,6 @@ contract Donation is Ownable {
     struct $_Campaign {
         address _owner; //The Campaign wallet which is the only one can withdraw
         uint _usdcBalance;
-
         uint _orgId;
         Donation.campaignstate _state;
         
@@ -72,7 +71,11 @@ contract Donation is Ownable {
     
     } 
     
-    //Doesn't have a real value now .. in the future will interact with Uniswap to change to USDC
+    /*
+        Getting Dai tokens from uniswap for deposited ETH
+        In Kovan uniswap Dai is not the same as AAVE Dai.
+        on Mainnet these tokens will occur interest in the Aave protocol
+    */
     receive() external payable {
          // Execute trade on Uniswap
         address[] memory path = new address[](2);
@@ -80,83 +83,88 @@ contract Donation is Ownable {
         path[1] = address(dai);
 
         uint[] memory amounts = uniswapRouter.swapExactETHForTokens{ value: msg.value }(0, path, address(this), block.timestamp + 10);
-        balanceReceived += amounts[1]; // The amount of Dai
+        balanceReceived += amounts[1]; // Update Dai amount
 
     }
     
-    // User deposit USDT and the A token goes to this contract
-    function userDepositUsdc(uint _amount, uint _campaingId) external {
+    /*
+        User deposit _amount after approve the contract to spend this amount
+        Depositing to a specific campaign
+    */
+    function userDepositUsdc(uint _amount, uint _campaignId) external {
         //Spending allowence done in the GUI
-        require(campaigns[_campaingId]._state == campaignstate.Active, "Organization not exist");
-        userDepositedUsdc[msg.sender][_campaingId] += _amount;                                  //Tarcking User deposits
-        campaigns[_campaingId]._usdcBalance += _amount;
+        require(campaigns[_campaignId]._state == campaignstate.Active, "Organization not exist");
+        userDepositedUsdc[msg.sender][_campaignId] += _amount;                                  //Tarcking User deposits
+        campaigns[_campaignId]._usdcBalance = campaigns[_campaignId]._usdcBalance - _amount;
         require(usdc.transferFrom(msg.sender, address(this), _amount), "USDC Transfer failed!");
 
         aaveLendingPool.deposit(address(usdc), _amount, address(this), 0);
-        emit DepositedToCharity(_amount, 0, _campaingId); // Assuming USDC is asset 0
+        emit DepositedToCharity(_amount, 0, _campaignId); // Assuming USDC is asset 0
         totalUsdcBalance += _amount;
      }
-    // For testing pupose only
-     function WithdrawUsdcAmount(uint _amount, uint _campaingId ) external {
+      /*
+        Withdraw function will be implement in mainnet like a farm contract
+        with shares and part of the total share for each campaign
+        Since Aave on Kovan doesn't behave the same as Mainnet ( the Atokens don't occur interest)
 
-        //Our organization have enough balance to withdraw
-        require(campaigns[_campaingId]._usdcBalance >= _amount, "You cannot withdraw more than deposited!");
-        require(campaigns[_campaingId]._owner == msg.sender, "Only Organization adming can withdraw");
-        //Only because it's a testing funciton
-        campaigns[_campaingId]._usdcBalance = campaigns[_campaingId]._usdcBalance - _amount;
-    
-
-        aaveLendingPool.withdraw(address(usdc), _amount, address(this)); 
-        require(usdc.transfer(msg.sender,  _amount), "USDC Transfer failed!"); 
-        emit WithdrawCharityInterest(_amount, 0, _campaingId);
-     }
-
-     function withdrawInterest(uint _campaingId) external {
+      */
+     function withdrawInterest(uint _campaignId) external {
          //For now it will work with only 1 organization since the way the yeild is bearing take from cake contract
-         require(campaigns[_campaingId]._owner == msg.sender, "Only Organization adming can withdraw");
+         require(campaigns[_campaignId]._owner == msg.sender, "Only Organization adming can withdraw");
 
          uint aUsdcTotal = aUsdc.balanceOf(address(this));
          uint256 totalInterest = aUsdcTotal - totalUsdcBalance; 
          if (totalInterest > 0){
             uint poolInterest = totalInterest / activeCampaigns;
+            campaigns[_campaignId]._usdcBalance -= poolInterest ;
             aaveLendingPool.withdraw(address(usdc), poolInterest, address(this)); 
             require(usdc.transfer(msg.sender,  poolInterest), "USDC Transfer failed!"); 
-            emit WithdrawCharityInterest(poolInterest, 0, _campaingId);
+            emit WithdrawCharityInterest(poolInterest, 0, _campaignId);
          }
      }
 
-    function withdrawInterestTest(uint _campaingId) external {
+    /*
+        Hard coded withdraw from the pool by the pool owner
+        Will not be use in Mainnet
+
+    */
+    function withdrawInterestTest(uint _campaignId) external {
          //For now it will work with only 1 organization since the way the yeild is bearing take from cake contract
 
         uint poolInterest = 100;
+        campaigns[_campaignId]._usdcBalance -= poolInterest ;
         aaveLendingPool.withdraw(address(usdc), poolInterest, address(this)); 
         require(usdc.transfer(msg.sender,  poolInterest), "USDC Transfer failed!"); 
-        emit WithdrawCharityInterest(poolInterest, 0, _campaingId);
+        emit WithdrawCharityInterest(poolInterest, 0, _campaignId);
          
      }
 
-    function withdrawAllFunds(uint _campaingId) external {
+    /*
+        Withdraw function will be implement in mainnet like a farm contract
+        with shares and part of the total share for each campaign
+        Since Aave on Kovan doesn't behave the same as Mainnet ( the Atokens don't occur interest)
+
+    */
+
+    function withdrawAllFunds(uint _campaignId) external {
         //For now it will work with only 1 organization since the way the yeild is bearing take from cake contract
-        require(campaigns[_campaingId]._owner == msg.sender, "Only Organization adming can withdraw");
+        require(campaigns[_campaignId]._owner == msg.sender, "Only Organization adming can withdraw");
 
         uint aUsdcTotal = aUsdc.balanceOf(address(this));
         uint totalInterest = aUsdcTotal - totalUsdcBalance; 
         uint poolInterest = totalInterest / activeCampaigns; //Use only for MVP
         activeCampaigns--; 
-        totalUsdcBalance -= campaigns[_campaingId]._usdcBalance;
+        totalUsdcBalance -= campaigns[_campaignId]._usdcBalance;
 
-        uint totalToWithdraw = campaigns[_campaingId]._usdcBalance + poolInterest;
-        campaigns[_campaingId]._usdcBalance = 0;
+        uint totalToWithdraw = campaigns[_campaignId]._usdcBalance + poolInterest;
+        campaigns[_campaignId]._usdcBalance = 0;
         campaigns[campaignIndex]._state = campaignstate.Stopped;
 
 
         aaveLendingPool.withdraw(address(usdc), totalToWithdraw, address(this)); 
         require(usdc.transfer(msg.sender,  totalToWithdraw), "USDC Transfer failed!"); 
-        emit WithdrawCharityInterest(totalToWithdraw, 0, _campaingId);
+        emit WithdrawCharityInterest(totalToWithdraw, 0, _campaignId);
 
     }
 
-    function _distributeInterestToActiveCampaign(uint poolInterest) private {
-        //Will have to distribute
-    }
 }
