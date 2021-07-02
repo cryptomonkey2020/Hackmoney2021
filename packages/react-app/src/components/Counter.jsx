@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import useOdometer from "use-odometer";
 
 const Counter = ({ initialValue, rate }) => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(initialValue);
 
   const targetRef = useRef(null);
   useOdometer(targetRef, count, {
