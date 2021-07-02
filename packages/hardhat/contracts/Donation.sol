@@ -28,10 +28,10 @@ contract Donation is Ownable {
     mapping ( uint => $_Campaign) public campaigns;
     uint campaignIndex; //Set to 0 on deploy by default
 
-    address public  AAVE_PROVIDER = 0x88757f2f99175387aB4C6a4b3067c77A695b0349;
-    IERC20 public usdc  = IERC20(0xe22da380ee6B445bb8273C81944ADEB6E8450422); // Kovan
-    IERC20 public aUsdc = IERC20(0xe12AFeC5aa12Cf614678f9bFeeB98cA9Bb95b5B0); // Kovan
-    IERC20 public dai   = IERC20(0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa);
+    address private  AAVE_PROVIDER = 0x88757f2f99175387aB4C6a4b3067c77A695b0349;
+    IERC20 private usdc  = IERC20(0xe22da380ee6B445bb8273C81944ADEB6E8450422); // Kovan
+    IERC20 private aUsdc = IERC20(0xe12AFeC5aa12Cf614678f9bFeeB98cA9Bb95b5B0); // Kovan
+    IERC20 private dai   = IERC20(0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa);
     
 
     IUniswapV2Router02 uniswapRouter = IUniswapV2Router02(0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D);//Uniswap router address
@@ -73,7 +73,7 @@ contract Donation is Ownable {
     } 
     
     //Doesn't have a real value now .. in the future will interact with Uniswap to change to USDC
-    function receiveETH() public payable {
+    receive() external payable {
          // Execute trade on Uniswap
         address[] memory path = new address[](2);
         path[0] = uniswapRouter.WETH();
@@ -97,7 +97,7 @@ contract Donation is Ownable {
         totalUsdcBalance += _amount;
      }
     // For testing pupose only
-     function userWithdrawUsdc(uint _amount, uint _campaingId ) external {
+     function WithdrawUsdcAmount(uint _amount, uint _campaingId ) external {
 
         //Our organization have enough balance to withdraw
         require(campaigns[_campaingId]._usdcBalance >= _amount, "You cannot withdraw more than deposited!");
