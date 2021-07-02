@@ -1,20 +1,19 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Button, Form } from "antd";
 import SuperfluidSDK from "@superfluid-finance/js-sdk";
 import { Web3Provider } from "@ethersproject/providers";
 import Web3 from "web3";
 import Counter from "../Counter";
-import testTokenAbi from "./abi/testToken.json";
+// import testTokenAbi from "./abi/testToken.json";
 
 const web3 = new Web3(Web3.givenProvider);
 
 export default function Superfluid({ address, amountDonated, percent }) {
-
   const fUSDCxAddress = "0x25b5cd2e6ebaedaa5e21d0ecf25a567ee9704aa7";
   const recipientAddress = ""; //Need org address for hard code
   const amount = amountDonated * (percent / 100);
   const rateName = "month";
- 
+
   function rate(_rate) {
     switch (_rate) {
       case "minute":
@@ -41,6 +40,8 @@ export default function Superfluid({ address, amountDonated, percent }) {
     await sf.initialize();
 
     const userWallet = address;
+    // const USDCx = await ISuperToken.at("0x84d207edecd64ad131a06ad9c20a0080fc29ba40");
+    // const USDCx = await ISuperToken.at(USDCAddress);
     const fUSDC = await sf.contracts.TestToken.at(sf.tokens.fUSDC.address);
     const fUSDCx = sf.tokens.fUSDCx;
     // Only need if user doen't have fUSDC
@@ -74,7 +75,7 @@ export default function Superfluid({ address, amountDonated, percent }) {
   //   const user = sf.user({
   //     address: userWallet,
   //     token: fUSDCxAddress,
-  //   });
+  //   }); 
 
   //   await user.flow({
   //     recipient: recipientAddress,
@@ -84,15 +85,9 @@ export default function Superfluid({ address, amountDonated, percent }) {
 
   return (
     <>
-      ${ amount } 
-      <Button
-        className="btn btn-primary-light"
-        onClick={ startTransfer }>
-        </Button>
-      <Counter
-        initialValue={ amount }
-        rate={ rateName }
-      />
+      ${amount}
+      <Button className="btn btn-primary-light" onClick={startTransfer}></Button>
+      <Counter initialValue={amount} rate={rateName} />
     </>
   );
 }
