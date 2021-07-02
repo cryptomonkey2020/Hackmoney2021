@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import moment from "moment"
 import { Divider, Statistic, Steps, Row, Col, Tooltip, Carousel, Radio } from 'antd'
-import { HeartFilled, LoadingOutlined } from '@ant-design/icons'
+import { HeartFilled } from '@ant-design/icons'
+import { DualAxes } from '@ant-design/charts'
 import { Link as ScrollLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 import AnimatedNumber from "animated-number-react"
 import { useInterval } from "../hooks"
@@ -40,13 +41,83 @@ const Campaign = ({
 
     const [amount, setAmount] = useState(100)
     const [generatedIncome, setGeneratedIncome] = useState(initialGeneratedIncome ? initialGeneratedIncome : 0);
+    const [chartConfig, setChartConfig] = useState(null)
 
     useEffect(() => {
         setGeneratedIncome(initialGeneratedIncome)
     }, [initialGeneratedIncome])
 
+    useEffect(() => {
+        if (incomeGeneratingAssets) {
+            setChartConfig({
+                data: [incomeGeneratingAssets, incomeGeneratingAssets],
+                xField: 'date',
+                yField: ['amount', 'income'],
+                seriesField: 'category',
+                limitInPlot: false,
+                padding: 'auto',
+                height: 280,
+                slider: null,
+                meta: { 
+                    date: { 
+                        formatter: (v) => moment(v).format('DD MMM'),
+                        type: 'time',
+                        showLast: true
+                    },
+                    amount: { alias: 'Total Donations', formatter: (v) => `$${v}` },
+                    income: { alias: 'Generated Income', formatter: (v) => `$${v}` }
+                },
+                tooltip: {
+                    showMarkers: false,
+                },
+                geometryOptions: [
+                    { 
+                        geometry: 'column', 
+                        columnStyle: { fill: '#FFC049'},
+                        columnWidthRatio: 0.5
+                    }, 
+                    { 
+                        geometry: 'line', 
+                        smooth: true, 
+                        lineStyle: {
+                            stroke: '#2775CA'
+                        }
+                    }
+                ],
+                yAxis: {
+                    amount: { 
+                        title: { 
+                            text: 'Income-generating assets',
+                            style: {
+                                fontWeight: 600
+                            }
+                        },
+                        label: { 
+                            style: {
+                                fill: '#000',
+                            }
+                        }
+                    },
+                    income: { 
+                        title: { 
+                            text: 'Generated income',
+                            style: {
+                                fontWeight: 600
+                            }
+                        },
+                        label: { 
+                            style: {
+                                fill: '#000'
+                            }
+                        }
+                    },
+                },
+            })
+        }
+    }, [incomeGeneratingAssets])
+
     useInterval(() => {
-        setGeneratedIncome(generatedIncome * 1.0005);
+        setGeneratedIncome(generatedIncome * 1.00005);
     }, 1000);
 
     const percentage = (goal && raised) ? (raised / goal * 100) : 0
@@ -173,13 +244,14 @@ const Campaign = ({
                                                     <div className="sub-section-title">Income-generating assets</div>
 
                                                     <Row gutter={8}>
-                                                        <Col span={8}>
-                                                            Graph
-                                                    </Col>
-                                                        <Col span={8}>
-                                                            <Statistic title="Income-generating Assets" value={raised ? raised * 0.5 : 0} prefix="$" />
+                                                        <Col span={16}>
+                                                            {chartConfig && <DualAxes {...chartConfig} />}
+                                                        </Col>
+                                                        <Col span={1}></Col>
+                                                        <Col span={7}>
+                                                            <Statistic title="Income-generating Donations" value={raised ? raised * 0.5 : 0} prefix="$" />
                                                             <Divider />
-                                                            <Statistic title="Income Generated" value={initialGeneratedIncome ? initialGeneratedIncome.toFixed(2) : 0} prefix="$" precision="2" />
+                                                            <Statistic title="Generated Income" value={generatedIncome ? generatedIncome.toFixed(2) : 0} prefix="$" precision="2" style={{ marginBottom: '1rem' }} />
                                                             <Statistic title="APR" value={apr ? apr.toFixed(2) : 0} suffix="%" />
                                                         </Col>
                                                     </Row>
@@ -304,7 +376,7 @@ const dummyCampaignInfo = {
     category: ['Wildlife Conservation'],
     description: "The wildlife trade is a multi-billion dollar industry that threatens endangered species' survival and human health as zoonotic diseases such as COVID-19 emerge. Cambodia is both a wildlife source and transit country, and illegal trafficking was rampant in 2001 when the Wildlife Rapid Rescue Team (WRRT) was established to crack down on the trade. To date, WRRT has rescued over 69,000 live animals, apprehended over 7,700 traders, and confiscated large quantities of animal parts and contraband.",
     images: ["https://i.imgur.com/XxWLj09.jpg","https://i.imgur.com/8E6xldh.jpg", "https://i.imgur.com/zbneBGE.jpg", "https://i.imgur.com/c25Ul4t.jpg"],
-    startDate: '2021-06-21T10:41:31+00:00',
+    startDate: '2021-05-17T10:41:31+00:00',
     endDate: '2022-01-31T10:41:31+00:00',
     goal: 100000,
     raised: 88368,
@@ -320,14 +392,54 @@ const dummyCampaignInfo = {
     ],
     incomeGeneratingAssets: [
         {
-            date: '2021-06-21T10:41:31+00:00',
-            amount: 18000,
-            income: 0
+            date: '2021-05-17T00:00:00+00:00',
+            amount: 28663,
+            income: 59
         },
         {
-            date: '2021-06-26T10:41:31+00:00',
-            amount: 22000,
-            income: 0
+            date: '2021-05-22T00:00:00+00:00',
+            amount: 32812,
+            income: 79
+        },
+        {
+            date: '2021-05-27T00:00:00+00:00',
+            amount: 38989,
+            income: 120
+        },
+        {
+            date: '2021-06-01T00:00:00+00:00',
+            amount: 45229,
+            income: 151.8
+        },
+        {
+            date: '2021-06-07T00:00:00+00:00',
+            amount: 59888,
+            income: 180.33
+        },
+        {
+            date: '2021-06-12T00:00:00+00:00',
+            amount: 62382,
+            income: 200.5
+        },
+        {
+            date: '2021-06-17T00:00:00+00:00',
+            amount: 73297,
+            income: 244.7
+        },
+        {
+            date: '2021-06-22T00:00:00+00:00',
+            amount: 76982,
+            income: 276.82
+        },
+        {
+            date: '2021-06-28T00:00:00+00:00',
+            amount: 79182,
+            income: 301.2
+        },
+        {
+            date: new Date(),
+            amount: 88368,
+            income: 334.6
         }
     ]
 }

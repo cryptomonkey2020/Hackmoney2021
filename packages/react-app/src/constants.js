@@ -374,7 +374,7 @@ export const NETWORKS = {
     blockExplorer: "https://etherscan.io/",
   },
   kovan: {
-    name: "kovan",
+    name: "kovan testnet",
     color: "#7003DD",
     chainId: 42,
     rpcUrl: `https://kovan.infura.io/v3/${INFURA_ID}`,
@@ -382,7 +382,7 @@ export const NETWORKS = {
     faucet: "https://gitter.im/kovan-testnet/faucet", // https://faucet.kovan.network/
   },
   rinkeby: {
-    name: "rinkeby",
+    name: "rinkeby testnet",
     color: "#e0d068",
     chainId: 4,
     rpcUrl: `https://rinkeby.infura.io/v3/${INFURA_ID}`,
@@ -390,7 +390,7 @@ export const NETWORKS = {
     blockExplorer: "https://rinkeby.etherscan.io/",
   },
   ropsten: {
-    name: "ropsten",
+    name: "ropsten testnet",
     color: "#F60D09",
     chainId: 3,
     faucet: "https://faucet.ropsten.be/",
@@ -398,7 +398,7 @@ export const NETWORKS = {
     rpcUrl: `https://ropsten.infura.io/v3/${INFURA_ID}`,
   },
   goerli: {
-    name: "goerli",
+    name: "goerli testnet",
     color: "#0975F6",
     chainId: 5,
     faucet: "https://goerli-faucet.slock.it/",
