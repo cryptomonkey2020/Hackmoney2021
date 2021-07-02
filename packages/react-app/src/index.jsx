@@ -1,13 +1,13 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import React from "react";
-import { ThemeSwitcherProvider } from "react-css-theme-switcher";
+// import { ThemeSwitcherProvider } from "react-css-theme-switcher";
 import ReactDOM from "react-dom";
 import App from "./App";
 import "./index.scss";
 
-const themes = {
-  light: `${process.env.PUBLIC_URL}/light-theme.css`,
-};
+// const themes = {
+//   light: `${process.env.PUBLIC_URL}/light-theme.css`,
+// };
 
 const prevTheme = window.localStorage.getItem("theme");
 
@@ -27,9 +27,9 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <ThemeSwitcherProvider themeMap={themes} defaultTheme={prevTheme || "light"}>
+    {/* <ThemeSwitcherProvider themeMap={themes} defaultTheme={prevTheme || "light"}> */}
       <App subgraphUri={subgraphUri} />
-    </ThemeSwitcherProvider>
+    {/* </ThemeSwitcherProvider> */}
   </ApolloProvider>,
   document.getElementById("root"),
 );

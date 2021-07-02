@@ -1,7 +1,7 @@
 import { Skeleton, Typography } from "antd";
 import React from "react";
 import Blockies from "react-blockies";
-import { useThemeSwitcher } from "react-css-theme-switcher";
+// import { useThemeSwitcher } from "react-css-theme-switcher";
 import { useLookupAddress } from "../hooks";
 import { shortenAddress } from "../utils";
 
@@ -40,7 +40,7 @@ export default function Address(props) {
 
   const ens = useLookupAddress(props.ensProvider, address);
 
-  const { currentTheme } = useThemeSwitcher();
+  // const { currentTheme } = useThemeSwitcher();
 
   if (!address) {
     return (
@@ -66,7 +66,7 @@ export default function Address(props) {
     return (
       <span style={{ verticalAlign: "middle" }}>
         <a
-          style={{ color: currentTheme === "light" ? "#222222" : "#ddd" }}
+          style={{ color: "#222222" }}
           target="_blank"
           href={etherscanLink}
           rel="noopener noreferrer"
@@ -82,7 +82,7 @@ export default function Address(props) {
     text = (
       <Text editable={{ onChange: props.onChange }}>
         <a
-          style={{ color: currentTheme === "light" ? "#222222" : "#ddd" }}
+          style={{ color: "#222222" }}
           target="_blank"
           href={etherscanLink}
           rel="noopener noreferrer"
@@ -95,7 +95,7 @@ export default function Address(props) {
     text = (
       <Text>
         <a
-          style={{ color: currentTheme === "light" ? "#222222" : "#ddd" }}
+          style={{ color: "#222222" }}
           target="_blank"
           href={etherscanLink}
           rel="noopener noreferrer"

@@ -23,7 +23,7 @@ import {
   useUserProvider,
 } from "./hooks";
 // import Hints from "./Hints";
-import { ExampleUI, Hints, Subgraph, MainPage, Donate, TestFaucet, MyProfile } from "./views";
+import { ExampleUI, Hints, Subgraph, Donate, TestFaucet, MyProfile, Campaign } from "./views";
 /*
     🌏 EXTERNAL CONTRACTS:
     You can also bring in contract artifacts in `constants.js`
@@ -271,6 +271,11 @@ function App(props) {
 
           <Route exact path="/profile">
             <MyProfile />
+          </Route>
+
+          <Route exact path="/campaigns/:id">
+            <Campaign
+              blockExplorer={blockExplorer} />
           </Route>
 
           <Route path="/hints">

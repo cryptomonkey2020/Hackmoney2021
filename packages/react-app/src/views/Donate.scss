@@ -36,11 +36,13 @@
     .donate-page-body {
         position: relative;
         display: flex;
-        padding: 2.5rem 0;
+        padding: 1.5rem;
+        border-radius: var(--border-radius-medium);
         justify-content: space-between;
-        width: 58rem;
+        width: 65rem;
         max-width: 100%;
-        margin: 0 auto;
+        margin: 2.5rem auto;
+        background: #FFF;
 
         .filters-column {
             position: sticky;
@@ -100,10 +102,10 @@
                 display: inline-block;
                 padding: 0.7rem 1rem 0.7rem 2.5rem;
                 margin-bottom: 1.5rem;
-                background: var(--primary-light);
-                border-radius: var(--border-radius);
+                background: var(--gray-light);
+                border-radius: var( --border-radius);
                 width: 100%;
-                border: 2px solid transparent;
+                border: 2px solid var(--gray-light-5);
                 outline: 0;
                 transition: width 0.4s ease-in-out, border 0.3s ease-in-out;
 

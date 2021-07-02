@@ -25,6 +25,7 @@ const NetworkCard = ({
                         </div>
                     }
                     type="error"
+                    style={{ fontSize: '95%' }}
                     closable={false}
                 />
             );
@@ -39,6 +40,7 @@ const NetworkCard = ({
                         </div>
                     }
                     type="error"
+                    style={{ fontSize: '95%' }}
                     closable={false}
                 />
             );
@@ -50,9 +52,17 @@ const NetworkCard = ({
     let cssProperty = {}
     cssProperty['--network-card-color'] = targetNetwork.color
 
-    return (
+    return typeof networkDisplay === 'string'
+    ? (
         <div 
             className="network-card badge" 
+            style={cssProperty}>
+            {networkDisplay}
+        </div>
+    ) :
+    (
+        <div 
+            className="network-card" 
             style={cssProperty}>
             {networkDisplay}
         </div>
