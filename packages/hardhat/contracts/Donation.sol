@@ -95,7 +95,7 @@ contract Donation is Ownable {
         //Spending allowence done in the GUI
         require(campaigns[_campaignId]._state == campaignstate.Active, "Organization not exist");
         userDepositedUsdc[msg.sender][_campaignId] += _amount;                                  //Tarcking User deposits
-        campaigns[_campaignId]._usdcBalance = campaigns[_campaignId]._usdcBalance - _amount;
+        campaigns[_campaignId]._usdcBalance += _amount;
         require(usdc.transferFrom(msg.sender, address(this), _amount), "USDC Transfer failed!");
 
         aaveLendingPool.deposit(address(usdc), _amount, address(this), 0);
