@@ -35,6 +35,7 @@ export default function Header({
                 <NavLink to="/donate" className="inline-flex-item-fill-height">Donate Now</NavLink>
                 <NavLink to="/create" className="inline-flex-item-fill-height">Create</NavLink>
                 <NavLink to="/dev-tools" className="inline-flex-item-fill-height">Dev Tools</NavLink>
+                <NavLink to="/stream" className="inline-flex-item-fill-height">Stream Now</NavLink>
               </nav>
             </div>
 

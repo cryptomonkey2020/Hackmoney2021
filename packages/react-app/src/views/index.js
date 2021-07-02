@@ -6,3 +6,4 @@ export { default as MainPage } from "./MainPage";
 export { default as MyProfile } from "./MyProfile";
 export { default as TestFaucet } from "./TestFaucet"
 export { default as Donate } from "./Donate";
+export { default as Campaigns } from "./Campaigns";
