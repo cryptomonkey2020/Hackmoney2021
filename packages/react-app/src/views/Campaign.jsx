@@ -250,7 +250,7 @@ const Campaign = ({
             startTransfer(superFluidAmount.toString(), lendingPercentage, donorAddress, donationContractAddress)
     
             const result = tx(
-                writeContracts.Donation.userDepositUsdc(ethers.utils.parseUnits(aaveAmount.toString(), donationAssetDecimals), ethers.utils.parseUnits("1", 1)),
+                writeContracts.Donation.userDepositUsdc(ethers.utils.parseUnits(aaveAmount.toString(), donationAssetDecimals), ethers.utils.parseUnits("0", 1)),
                 update => {
                     console.log("📡 Transaction Update:", update);
                     if (update && (update.status === "confirmed" || update.status === 1)) {
