@@ -43,7 +43,7 @@ contract Donation is Ownable {
     uint public totalUsdcBalance = 0;
     uint public activeCampaigns = 0;
 
-    mapping(address => mapping(uint => uint)) userDepositedUsdc;
+    mapping(address => mapping(uint => uint)) public userDepositedUsdc;
 
     
     //Events

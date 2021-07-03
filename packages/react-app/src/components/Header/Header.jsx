@@ -70,7 +70,7 @@ export default function Header({
                             <button
                               className="dropdown-item d-flex align-items-center"
                               onClick={logoutOfWeb3Modal}>
-                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-x" style={{ marginRight: '.4rem' }} width="22" height="22" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-square-x" style={{ marginRight: '.4rem' }} width="22" height="22" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <rect x="4" y="4" width="16" height="16" rx="2" />
                                 <path d="M10 10l4 4m0 -4l-4 4" />

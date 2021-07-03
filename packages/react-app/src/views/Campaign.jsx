@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import moment from "moment"
-import { Divider, Statistic, Steps, Row, Col, Tooltip, Carousel, Radio } from 'antd'
+import { Alert, Divider, Statistic, Steps, Row, Col, Tooltip, Carousel, Spin, notification, Typography } from 'antd'
 import { HeartFilled } from '@ant-design/icons'
 import { DualAxes } from '@ant-design/charts'
 import { Link as ScrollLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 import AnimatedNumber from "animated-number-react"
 import { formatUnits } from "@ethersproject/units"
 import { ethers } from "ethers"
+import usdcLogo from '../assets/usdc-logo.svg'
 
-import { startTransfer } from '../superfluid/superfluid'; 
+import { startTransfer } from '../superfluid/superfluid';
 import { useInterval } from "../hooks"
+import { DAI_ABI } from "../constants"
 import "./Campaign.scss"
 
-const { Countdown } = Statistic
 const { Step } = Steps
+const { Text } = Typography
 
 
 const Campaign = ({
@@ -23,8 +25,12 @@ const Campaign = ({
     blockExplorer,
     donorAddress,
     tx,
-    writeContracts
+    writeContracts,
+    selectedProvider,
+    totalDonationsByCurrentWallet
 }) => {
+
+  let signer = selectedProvider && selectedProvider.getSigner()
 
     useEffect(() => {
         Events.scrollEvent.register('begin', function (to, element) { });
@@ -50,14 +56,22 @@ const Campaign = ({
 
     const [generatedIncome, setGeneratedIncome] = useState(initialGeneratedIncome ? initialGeneratedIncome : 0);
     const [chartConfig, setChartConfig] = useState(null)
-    const [donationAmount, setDonationAmount] = useState(500)
+
+    const [donationAmount, setDonationAmount] = useState()
     const [donationAsset, setDonationAsset] = useState('USDC')
     const [donationAssetAddress, setDonationAssetAddress] = useState('0xe22da380ee6B445bb8273C81944ADEB6E8450422')
     const [donationAssetDecimals, setDonationAssetDecimals] = useState(18)
     const [donationAssetBalance, setDonationAssetBalance] = useState(0)
+    const donationAssetBalanceInInt = donationAssetDecimals && parseFloat(formatUnits(donationAssetBalance, donationAssetDecimals))
     const [donationAssetAllowance, setDonationAssetAllowance] = useState(-1)
     const donationAssetAllowanceInInt = donationAssetAllowance && donationAssetDecimals && parseFloat(formatUnits(donationAssetAllowance, donationAssetDecimals))
+
+    const totalDonationsByCurrentWalletInFloat = donationAssetDecimals && parseFloat(formatUnits(totalDonationsByCurrentWallet, donationAssetDecimals))
+
+    const [allowing, setAllowing] = useState(false)
     const [depositing, setDepositing] = useState(false)
+    const [depositSuccess, setDepositSuccess] = useState(false)
+    const [isFetchingTokenInfo, setIsFetchingTokenInfo] = useState(true)
 
     useEffect(() => {
         setGeneratedIncome(initialGeneratedIncome)
@@ -150,37 +164,112 @@ const Campaign = ({
         setGeneratedIncome(generatedIncome * 1.00005);
     }, 1000);
 
-    const depositAssetToOrgContract = async () => {
-      const depositedAmount = donationAmount.toString();
-      const aaveAmount = (depositedAmount*((100-lendingPercentage)/100)).toString();
-      console.log('trying to deposit', ethers.utils.parseUnits(aaveAmount, donationAssetDecimals))
-  
-      if (depositedAmount && donationAssetDecimals) {
-          setDepositing(true)
-  
-          startTransfer(depositedAmount, lendingPercentage, donorAddress, address);
-  
-          const result = tx(
-              writeContracts.Donation.userDepositUsdc(ethers.utils.parseUnits(aaveAmount, donationAssetDecimals), ethers.utils.parseUnits("1", 1)),
-              update => {
-                  console.log("📡 Transaction Update:", update);
-                  if (update && (update.status === "confirmed" || update.status === 1)) {
-                  console.log(" 🍾 Transaction " + update.hash + " finished!");
-                  console.log(
-                      " ⛽️ " +
-                      update.gasUsed +
-                      "/" +
-                      (update.gasLimit || update.gas) +
-                      " @ " +
-                      parseFloat(update.gasPrice) / 1000000000 +
-                      " gwei",
-                  );
+    const getTokenInfo = async () => {
+
+      if (donationAssetAddress && donorAddress && writeContracts && writeContracts['Donation']) {
+
+          setIsFetchingTokenInfo(true)
+
+          // console.log(`getting info of ${donationAsset} token (${donationAssetAddress}) in ${donorAddress}`)
+
+          let tokenContract = new ethers.Contract(donationAssetAddress, DAI_ABI, signer)
+          let _decimals = await tokenContract.decimals();
+          let _balance = await tokenContract.balanceOf(donorAddress);
+          let donationVaultAddress = writeContracts['Donation'].address
+          let _allowance = await tokenContract.allowance(donorAddress, donationVaultAddress);
+          console.log(`<<${donationAsset}>> (${donationAssetAddress}) decimals: ${_decimals}, balance: ${_balance}, allowance: ${_allowance}, wallet: ${donorAddress}`)
+          setDonationAssetDecimals(_decimals)
+          setDonationAssetBalance(_balance);
+          setDonationAssetAllowance(_allowance);
+          setIsFetchingTokenInfo(false)
+      }
+  }
+
+  useEffect(() => {
+      if (donationAsset && donorAddress) getTokenInfo()
+  }, [donationAsset, donorAddress, writeContracts])
+
+    const setFullTokenAllowance = async () => {
+      if (donationAssetAddress && donorAddress && writeContracts && writeContracts['Donation']) {
+          try {
+              setAllowing(true)
+
+              let tokenContract = new ethers.Contract(donationAssetAddress, DAI_ABI, signer);
+              let donationContractAddress = writeContracts['Donation'].address
+
+              console.log(`approving ${donationAsset} for spender (${donationContractAddress})`)
+
+              const result = tx(
+                  tokenContract.approve(donationContractAddress, ethers.constants.MaxUint256),
+                  update => {
+                      console.log("📡 Transaction Update:", update);
+                      if (update && (update.status === "confirmed" || update.status === 1)) {
+                          console.log(" 🍾 Transaction " + update.hash + " finished!");
+                          console.log(
+                              " ⛽️ " +
+                              update.gasUsed +
+                              "/" +
+                              (update.gasLimit || update.gas) +
+                              " @ " +
+                              parseFloat(update.gasPrice) / 1000000000 +
+                              " gwei",
+                          );
+                          notification.open({
+                              message: `You have approved spending on your ${donationAsset}!`,
+                              description:
+                                  <><Text>{`The donation contract can move ${donationAsset} on your behalf now.`}</Text></>,
+                          });
+                          setDonationAssetAllowance(ethers.constants.MaxUint256)
+                          setAllowing(false)
+                      }
                   }
-              }
-          );
-          await tx
-          console.log("awaiting metamask/web3 confirm result...", result);
-          setDepositing(false)
+              );
+              await tx
+              
+          }
+          catch (e) {
+              console.log(e)
+              setAllowing(false)
+          }
+      }
+  }
+
+    const depositAssetToOrgContract = async () => {
+
+      if (donationAmount > 0) {
+        const depositedAmount = donationAmount.toString();
+        const aaveAmount = (depositedAmount*((100-lendingPercentage)/100)).toString();
+        console.log('trying to deposit', ethers.utils.parseUnits(aaveAmount, donationAssetDecimals))
+    
+        if (depositedAmount && donationAssetDecimals && writeContracts && writeContracts['Donation']) {
+            setDepositing(true)
+    
+            let donationContractAddress = writeContracts['Donation'].address
+            startTransfer(depositedAmount, lendingPercentage, donorAddress, donationContractAddress);
+    
+            const result = tx(
+                writeContracts.Donation.userDepositUsdc(ethers.utils.parseUnits(aaveAmount, donationAssetDecimals), ethers.utils.parseUnits("1", 1)),
+                update => {
+                    console.log("📡 Transaction Update:", update);
+                    if (update && (update.status === "confirmed" || update.status === 1)) {
+                    console.log(" 🍾 Transaction " + update.hash + " finished!");
+                    console.log(
+                        " ⛽️ " +
+                        update.gasUsed +
+                        "/" +
+                        (update.gasLimit || update.gas) +
+                        " @ " +
+                        parseFloat(update.gasPrice) / 1000000000 +
+                        " gwei",
+                    );
+                    setDepositSuccess(true)
+                    }
+                }
+            );
+            await tx
+            console.log("awaiting metamask/web3 confirm result...", result);
+            setDepositing(false)
+        }
       }
     }
 
@@ -214,7 +303,7 @@ const Campaign = ({
                                 </div>
                                 <div className="location d-inline-block">
                                     <div className="d-flex align-items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map-pin" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map-pin" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2c3e50" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <circle cx="12" cy="11" r="3" />
                                             <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" />
@@ -382,6 +471,14 @@ const Campaign = ({
 
                 <Col span={6}>
                     <div className="campaign-sidebar">
+                        {totalDonationsByCurrentWalletInFloat > 0 && (
+                          <Alert
+                            message={`You have donated ${formatValue(totalDonationsByCurrentWalletInFloat)}`}
+                            type="success"
+                            style={{ marginBottom: '0.6rem' }}
+                            showIcon
+                          />
+                        )}
                         <div className="campaign-sidebar-section scrollbar">
 
                             {/* Progress */}
@@ -392,10 +489,10 @@ const Campaign = ({
                                         <Statistic value={goal} prefix="$" valueStyle={{ fontSize: '92%' }} suffix="goal" className="goal" />
                                     </Col>
                                     <Col span={8}>
-                                        <Statistic value={daysLeft} valueStyle={{ fontSize: '92%' }} suffix="days left" className="days-left" />
+                                        <Statistic value={donorCount} valueStyle={{ fontSize: '92%' }} suffix="donors" className="donors" />
                                     </Col>
                                     <Col span={8}>
-                                        <Statistic value={donorCount} valueStyle={{ fontSize: '92%' }} suffix="donors" className="donors" />
+                                        <Statistic value={daysLeft} valueStyle={{ fontSize: '92%' }} suffix="days left" className="days-left" />
                                     </Col>
                                 </Row>
                                 <div className="progress-bar-container">
@@ -403,7 +500,7 @@ const Campaign = ({
                                 </div>
                             </div>
 
-                            <div className="ant-statistic total-donations" style={{ marginTop: '0.8rem', marginBottom: '1rem' }}>
+                            <div className="ant-statistic total-donations" style={{ marginTop: '1.2rem', marginBottom: '1rem' }}>
                                 <div className="ant-statistic-content">
                                     <div className="ant-statistic-title">Total to be received by {organisationName}:</div>
                                     <span className="ant-statistic-content-value">
@@ -416,7 +513,7 @@ const Campaign = ({
                                 </div>
                             </div>
 
-                            <Row gutter={10} style={{ marginBottom: '1.4rem' }}>
+                            <Row gutter={10} style={{ marginBottom: '1.8rem' }}>
                                 <Col span={12}>
                                     <Statistic title="Raised" value={raised ? raised : 0} prefix="$" className="raised" />
                                 </Col>
@@ -439,15 +536,63 @@ const Campaign = ({
                             
 
                             {/* Donation Box */}
-
+                            
                             <div className="donation-box">
+
                                 <h3>Give</h3>
-                                <input type="number" className="amount" value={donationAmount} onChange={(e) => setDonationAmount(e.target.value)} />
-                                <button className="btn btn-primary" onClick={ depositAssetToOrgContract }>
-                                    Give <HeartFilled />
-                                </button>
+                                
+                                <div className="d-flex justify-content-between">
+                                  <span className="currency-full-name">USD Coin</span>
+                                  <span className="available-amount">You have {donationAssetBalanceInInt} {donationAsset}</span>
+                                </div>
+                                <div className="d-flex align-items-center" style={{ padding: '.4rem 0', marginBottom: '.8rem' }}>
+                                  <div className="d-flex align-items-center" style={{ flexWrap: "no-wrap" }}>
+                                    <img className="currency-logo" src={usdcLogo} width="28" height="28" />{" "}
+                                    <span className="currency-ticker">{donationAsset}</span>
+                                  </div>
+                                  <div>
+                                    <input 
+                                      type="text" 
+                                      className="donation-amount" 
+                                      inputMode="decimal"
+                                      autoComplete="off"
+                                      autoCorrect="off"
+                                      pattern="^[0-9]*[.,]?[0-9]*$"
+                                      placeholder="0.0"
+                                      value={donationAmount} 
+                                      onChange={(e) => setDonationAmount(e.target.value)}
+                                       />
+                                    </div>
+                                </div>
+
+                                {(donationAssetAllowanceInInt >= donationAmount) || (donationAmount === undefined)
+                                  ? (
+                                    <button
+                                      type="button"
+                                      className="btn btn-primary"
+                                      style={{ width: '100%', padding: '0.6rem 1.5rem' }} 
+                                      loading={depositing}
+                                      disabled={donationAssetAllowanceInInt < donationAmount}
+                                      onClick={() => depositAssetToOrgContract() }
+                                    >
+                                      {depositing ? <Spin /> : <>Give <HeartFilled /></>}
+                                    </button>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      className="btn btn-primary"
+                                      style={{ width: '100%', padding: '0.6rem 1.5rem' }} 
+                                      disabled={donationAssetAllowanceInInt >= donationAmount}
+                                      onClick={() => setFullTokenAllowance() }
+                                    >
+                                        {allowing ? <Spin /> : 'Approve for transfer'}
+                                    </button>
+                                  )
+                                }
                             </div>
+
                             </div>
+                            
                             <div className="campaign-sidebar-section scrollbar">
 
                             {/* Timeline */}

@@ -145,6 +145,12 @@
                 border: 1px solid var(--gray-light-4);
                 padding: .5rem 1rem;
                 font-size: 95%;
+                text-decoration: none;
+                color: #000;
+
+                &:hover {
+                    border-color: #000;
+                }
             }
             .distribution-item {
                 .date {
@@ -160,10 +166,6 @@
 
                 svg {
                     margin-right: .5rem;
-                }
-
-                &:hover {
-                    border-color: #000;
                 }
             }
 
@@ -212,21 +214,56 @@
             }
             .donors {
                 font-size: 92%;
-                text-align: right;
+                text-align: center;
             }
             .goal {
                 font-size: 92%;
             }
             .days-left {
-                text-align: center;
+                text-align: right;
             }
         }
 
         .donation-box {
             border-radius: var(--border-radius);
-            padding: 1.5rem;
+            padding: 1rem 1.5rem;
             border: 1px solid var(--gray-light-5);
             box-shadow: 0 0 0 2px rgba(10, 10, 10, 0.02);
+
+            .currency-full-name {
+                font-size: 92%;
+                color: var(--gray-medium);
+            }
+            .available-amount {
+                font-size: 92%;
+                color: var(--gray-medium);
+                font-style: italic;
+            }
+            .currency-logo {
+                margin: 0;
+                margin-right: .4rem;
+            }
+            .currency-ticker {
+                font-size: 150%;
+            }
+            .donation-amount {
+                border: 0;
+                flex: 1;
+                font-size: 150%;
+                font-weight: 700;
+                text-align: right;
+                width: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding: 0px;
+                appearance: textfield;
+                outline: none;
+
+                &:focus {
+                    outline: none;
+                }
+            }
         }
 
         .timeline {

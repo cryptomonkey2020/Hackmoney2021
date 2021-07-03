@@ -199,6 +199,21 @@ function App(props) {
   let faucetHint = "";
   const faucetAvailable = localProvider && localProvider.connection && targetNetwork.name === "localhost";
 
+  const [totalDonationsByCurrentWallet, setTotalDonationsByCurrentWallet] = useState(0)
+
+  useEffect(() => {
+    const fetchDonatedAmount = async () => {
+      try {
+        const _totalDonationsByCurrentWallet = await readContracts.Donation.userDepositedUsdc(address, "1")
+        setTotalDonationsByCurrentWallet(_totalDonationsByCurrentWallet)
+
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    if (readContracts) fetchDonatedAmount()
+  }, [readContracts])
+  
   const [faucetClicked, setFaucetClicked] = useState(false);
   if (
     !faucetClicked &&
@@ -279,6 +294,8 @@ function App(props) {
               donorAddress={ address }
               tx={tx}
               writeContracts={writeContracts}
+              selectedProvider={userProvider}
+              totalDonationsByCurrentWallet={totalDonationsByCurrentWallet}
             />
           </Route>
           
