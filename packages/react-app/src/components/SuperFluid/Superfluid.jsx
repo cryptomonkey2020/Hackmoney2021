@@ -14,6 +14,7 @@ export default function Superfluid({ address, amountDonated, percent }) {
   const recipientAddress = ""; //Need org address for hard code
   const amount = amountDonated * (percent / 100);
   const rateName = "hour";
+  const flow = flowRate(amount, rateName);
  
   function rate(_rate) {
     switch (_rate) {
@@ -60,7 +61,7 @@ export default function Superfluid({ address, amountDonated, percent }) {
 
     await user.flow({
       recipient: recipientAddress,
-      flowRate: flowRate(amount, rateName),
+      flowRate: flow,
     });
   }
 
@@ -88,7 +89,7 @@ export default function Superfluid({ address, amountDonated, percent }) {
     <>
       ${amount}
       <Button className="btn btn-primary-light" onClick={startTransfer}></Button>
-      <Counter initialValue={amount} rate={rateName} />
+      <Counter initialValue={amount} rate={flow} />
     </>
   );
 }
