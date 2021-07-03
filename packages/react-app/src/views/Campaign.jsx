@@ -39,6 +39,8 @@ const Campaign = ({
         generatedIncome: initialGeneratedIncome, incomeDistributions, incomeGeneratingAssets, apr
     } = campaignInfo || {}
 
+    const daysLeft = (startDate && endDate) ? moment(endDate).diff(moment(startDate), 'days') : '?'
+
     const [amount, setAmount] = useState(100)
     const [generatedIncome, setGeneratedIncome] = useState(initialGeneratedIncome ? initialGeneratedIncome : 0);
     const [chartConfig, setChartConfig] = useState(null)
@@ -55,6 +57,20 @@ const Campaign = ({
                 yField: ['amount', 'income'],
                 seriesField: 'category',
                 limitInPlot: false,
+                theme: {
+                    colors10: [
+                        '#FFC049',
+                        '#2775CA',
+                        '#FFC100',
+                        '#9FB40F',
+                        '#76523B',
+                        '#DAD5B5',
+                        '#0E8E89',
+                        '#E19348',
+                        '#F383A2',
+                        '#247FEA',
+                    ]
+                },
                 padding: 'auto',
                 height: 280,
                 slider: null,
@@ -127,7 +143,7 @@ const Campaign = ({
 
     const deadline = endDate && new Date(endDate)
 
-    const formatValue = value => `$ ${Number(value).toFixed(2)}`
+    const formatValue = value => `$ ${Number(value).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
 
 
     return (
@@ -195,7 +211,9 @@ const Campaign = ({
                                             <section className="why-are-we-raising-money">
                                                 <Element name="why-are-we-raising-money" className="element">
                                                     <div className="section-title">Why are we raising money?</div>
-                                                    {description}
+                                                    <div className="description">
+                                                        {description}
+                                                    </div>
                                                 </Element>
                                             </section>
                                         )}
@@ -263,14 +281,16 @@ const Campaign = ({
                                                 <section className="income-distributions">
                                                     <div className="sub-section-title">Income Distributions</div>
                                                     {incomeDistributions && incomeDistributions.map((distribution, i) => (
-                                                        <div className="distribution-item" key={`distribution-${i}`}>
+                                                        <a href={etherscanLink} target="_blank" className="distribution-item" key={`distribution-${i}`}>
                                                             <div className="date">
-                                                                {distribution.date && moment(distribution.date).format('DD MMM YYYY')}
+                                                                {distribution.date && 
+                                                                    moment(distribution.date).format('DD MMM YYYY')
+                                                                }
                                                             </div>
                                                             <div className="amount">
                                                                 {distribution.amount && `${distribution.amount} USDC distributed`}
                                                             </div>
-                                                        </div>
+                                                        </a>
                                                     ))}
                                                 </section>
 
@@ -314,44 +334,94 @@ const Campaign = ({
 
                 <Col span={6}>
                     <div className="campaign-sidebar">
-                        <Statistic title="Income generated in USDC" value={raised ? raised * 0.5 : 0} prefix="$" />
+                        <div className="campaign-sidebar-section scrollbar">
 
-                        {/* Progress */}
+                            {/* Progress */}
 
-                        <div className="progress">
-                            <div className="progress-bar-container">
-                                <div className="progress-bar" style={{ width: `${percentage}%` }}></div>
+                            <div className="progress">
+                                <Row gutter={10} style={{ marginBottom: '0.2rem', alignItems: 'center' }}>
+                                    <Col span={8}>
+                                        <Statistic value={goal} prefix="$" valueStyle={{ fontSize: '92%' }} suffix="goal" className="goal" />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Statistic value={daysLeft} valueStyle={{ fontSize: '92%' }} suffix="days left" className="days-left" />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Statistic value={donorCount} valueStyle={{ fontSize: '92%' }} suffix="donors" className="donors" />
+                                    </Col>
+                                </Row>
+                                <div className="progress-bar-container">
+                                    <div className="progress-bar" style={{ width: `${percentage}%` }}></div>
+                                </div>
                             </div>
-                            <div className="raised">{raised}</div>
-                            <div className="goal">raised of ${goal} goal</div>
-                            <div className="donations">{donorCount} donations</div>
-                            <AnimatedNumber
-                                value={generatedIncome}
-                                formatValue={formatValue}
-                                duration={1000}
-                            />
+
+                            <div className="ant-statistic total-donations" style={{ marginTop: '0.8rem', marginBottom: '1rem' }}>
+                                <div className="ant-statistic-content">
+                                    <div className="ant-statistic-title">Total to be received by {organisationName}:</div>
+                                    <span className="ant-statistic-content-value">
+                                        <AnimatedNumber
+                                            value={generatedIncome + raised}
+                                            formatValue={formatValue}
+                                            duration={1000}
+                                        />
+                                    </span>
+                                </div>
+                            </div>
+
+                            <Row gutter={10} style={{ marginBottom: '1.4rem' }}>
+                                <Col span={12}>
+                                    <Statistic title="Raised" value={raised ? raised : 0} prefix="$" className="raised" />
+                                </Col>
+                                <Col span={12}>
+                                    <div className="ant-statistic income-generated">
+                                        <div className="ant-statistic-title">Income generated</div>
+                                        <div className="ant-statistic-content">
+                                            <span className="ant-statistic-content-value">
+                                                <AnimatedNumber
+                                                    value={generatedIncome}
+                                                    formatValue={formatValue}
+                                                    duration={1000}
+                                                />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </Col>
+                            </Row>
+
+                            
+
+                            {/* Donation Box */}
+
+                            <div className="donation-box">
+                                <h3>Give</h3>
+                                <input type="number" className="amount" value={amount} onChange={(e) => setAmount(e.target.value)} />
+                                <button className="btn btn-primary">
+                                    Give <HeartFilled />
+                                </button>
+                            </div>
+                            </div>
+                            <div className="campaign-sidebar-section scrollbar">
+
+                            {/* Timeline */}
+
+                            <section className="timeline">
+                                    <Steps current={1} size="small" direction="vertical" progressDot>
+                                        <Step title={startDate && moment(startDate).format('DD MMM YYYY')} description="Project created" />
+                                        <Step 
+                                        title="In Progress" 
+                                        subTitle={`Left ${daysLeft} days`} 
+                                        description={
+                                            <ul style={{ paddingLeft: '1rem', marginBottom: '0' }}>
+                                                <li>Accepting donations.</li>
+                                                <li>{organisationName} receives {100 - lendingPercentage}% donations immediately</li>
+                                                <li>Generating income using {lendingPercentage}% of donations</li>
+                                            </ul>
+                                        } 
+                                        status="process" />
+                                        <Step title={endDate && moment(endDate).format('DD MMM YYYY')} description="All funds will be withdrawn from vaults and sent to project wallet." />
+                                    </Steps>
+                            </section>
                         </div>
-
-                        {/* Donation Box */}
-
-                        <div className="donation-box">
-                            <h3>Give</h3>
-                            <input type="number" className="amount" value={amount} onChange={(e) => setAmount(e.target.value)} />
-                            <button className="btn btn-primary">
-                                Give <HeartFilled />
-                            </button>
-                        </div>
-
-
-                        {/* Timeline */}
-
-                        <section className="timeline">
-                                <Steps current={1} size="small" direction="vertical" progressDot>
-                                    <Step title={startDate && moment(startDate).format('DD MMM YYYY')} description="Project created" />
-                                    <Step title="In Progress" subTitle={`Left 3 days`} description={<>Accepting donations.<br/>Generating income using donations</>} status="process" />
-                                    <Step title={endDate && moment(endDate).format('DD MMM YYYY')} description="All funds will be withdrawn from vaults and sent to project wallet." />
-                                </Steps>
-                        </section>
                     </div>
 
                 </Col>

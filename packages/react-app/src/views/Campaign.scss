@@ -129,6 +129,11 @@
                     margin-right: .5rem;
                 }
             }
+            &.why-are-we-raising-money {
+                .description {
+                    font-size: 110%;
+                }
+            }
             .income-generating-assets {
                 .ant-statistic-title {
                     font-size: 0.8rem;
@@ -169,11 +174,60 @@
         position: sticky;
         top: 1.5rem;
         align-self: flex-start;
-        padding: 2rem;
         margin-top: 1rem;
-        background: #fff;
-        border-radius: var(--border-radius);
-        border-left: 1px solid var(--gray-light-3);
+        padding-bottom: 1rem;
+
+        .campaign-sidebar-section {
+            padding: 2rem;
+            background: #fff;
+            border-radius: var(--border-radius);
+            border-left: 1px solid var(--gray-light-3);
+
+            &:not(:last-of-type) {
+                margin-bottom: 1.5rem;
+            }
+        }
+
+        .total-donations {
+            .ant-statistic-content-value {
+                color: var(--primary-medium);
+                font-weight: 700;
+            }
+        }
+        .total-donations, .income-generated, .raised {
+            .ant-statistic-content {
+                line-height: 28px;
+
+                .ant-statistic-content-value {
+                    font-size: 1.7rem;
+                }
+            }
+        }
+
+        .progress {
+            .in-usdc {
+                color: var(--gray-medium);
+                font-size: 0.8rem;
+                font-weight: 700;
+            }
+            .donors {
+                font-size: 92%;
+                text-align: right;
+            }
+            .goal {
+                font-size: 92%;
+            }
+            .days-left {
+                text-align: center;
+            }
+        }
+
+        .donation-box {
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            border: 1px solid var(--gray-light-5);
+            box-shadow: 0 0 0 2px rgba(10, 10, 10, 0.02);
+        }
 
         .timeline {
             .ant-steps-item-title, .ant-steps-item-subtitle {
