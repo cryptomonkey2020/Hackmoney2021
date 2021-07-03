@@ -8,15 +8,12 @@ const Counter = ({ initialValue, rate }) => {
   useOdometer(targetRef, count, {
     format: "(,ddd).dddd",
   });
+  
+  const interestEarned = initialValue / rate;
 
-  const interestEarnedIn2Seconds = rate * 2;
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setCount(count + interestEarnedIn2Seconds);
-    }, 2000);
-    return () => clearTimeout(timer);
-  });
+  setTimeout(() => {
+    setCount(count - interestEarned);
+  }, 1000);
 
   return (
       <>

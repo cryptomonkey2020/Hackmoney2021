@@ -89,7 +89,7 @@ export default function Superfluid({ address, amountDonated, percent }) {
     <>
       ${amount}
       <Button className="btn btn-primary-light" onClick={startTransfer}></Button>
-      <Counter initialValue={amount} rate={flow} />
+      <Counter initialValue={amount} rate={rate(rateName)} />
     </>
   );
 }
