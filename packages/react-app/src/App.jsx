@@ -277,6 +277,8 @@ function App(props) {
             <Campaign
               blockExplorer={ blockExplorer }
               donorAddress={ address }
+              tx={tx}
+              writeContracts={writeContracts}
             />
           </Route>
           

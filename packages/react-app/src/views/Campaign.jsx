@@ -7,8 +7,10 @@ import { DualAxes } from "@ant-design/charts";
 import { Link as ScrollLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from "react-scroll";
 import AnimatedNumber from "animated-number-react";
 import { useInterval } from "../hooks";
+import { formatUnits } from "@ethersproject/units";
+import { ethers } from "ethers";
 import "./Campaign.scss";
-import Superfluid from "../components/SuperFluid/Superfluid";
+import { startTransfer } from '../superfluid/superfluid'; 
 
 const { Countdown } = Statistic;
 const { Step } = Steps;
@@ -18,6 +20,8 @@ const Campaign = ({
   campaignInfo = dummyCampaignInfo,
   blockExplorer,
   donorAddress,
+  tx,
+  writeContracts
 }) => {
   useEffect(() => {
     Events.scrollEvent.register("begin", function (to, element) {});
@@ -55,6 +59,14 @@ const Campaign = ({
   const [generatedIncome, setGeneratedIncome] = useState(initialGeneratedIncome ? initialGeneratedIncome : 0);
   const [chartConfig, setChartConfig] = useState(null);
   const [percent, setPercent] = useState(0);
+  const [donationAmount, setDonationAmount] = useState("500")
+  const [donationAsset, setDonationAsset] = useState('USDC')
+  const [donationAssetAddress, setDonationAssetAddress] = useState('0xe22da380ee6B445bb8273C81944ADEB6E8450422')
+  const [donationAssetDecimals, setDonationAssetDecimals] = useState(18)
+  const [donationAssetBalance, setDonationAssetBalance] = useState(0)
+  const [donationAssetAllowance, setDonationAssetAllowance] = useState(-1)
+  const donationAssetAllowanceInInt = donationAssetAllowance && donationAssetDecimals && parseFloat(formatUnits(donationAssetAllowance, donationAssetDecimals))
+  const [depositing, setDepositing] = useState(false)
 
   useEffect(() => {
     setGeneratedIncome(initialGeneratedIncome);
@@ -141,6 +153,40 @@ const Campaign = ({
   const deadline = endDate && new Date(endDate);
 
   const formatValue = value => `$ ${Number(value).toFixed(2)}`;
+
+  const depositAssetToOrgContract = async () => {
+    const depositedAmount = amount.toString();
+    const aaveAmount = (depositedAmount*((100-percent)/100)).toString();
+    console.log('trying to deposit', ethers.utils.parseUnits(aaveAmount, donationAssetDecimals))
+
+    if (depositedAmount && donationAssetDecimals) {
+        setDepositing(true)
+
+        startTransfer(depositedAmount, percent, donorAddress, address);
+
+        const result = tx(
+            writeContracts.Donation.userDepositUsdc(ethers.utils.parseUnits(aaveAmount, donationAssetDecimals), ethers.utils.parseUnits("1", 1)),
+            update => {
+                console.log("📡 Transaction Update:", update);
+                if (update && (update.status === "confirmed" || update.status === 1)) {
+                console.log(" 🍾 Transaction " + update.hash + " finished!");
+                console.log(
+                    " ⛽️ " +
+                    update.gasUsed +
+                    "/" +
+                    (update.gasLimit || update.gas) +
+                    " @ " +
+                    parseFloat(update.gasPrice) / 1000000000 +
+                    " gwei",
+                );
+                }
+            }
+        );
+        await tx
+        console.log("awaiting metamask/web3 confirm result...", result);
+        setDepositing(false)
+    }
+  }
 
   return (
     <div className="campaign-page">
@@ -455,10 +501,11 @@ const Campaign = ({
                     />
                   </span>{" "}
                   %: &nbsp;
-                  <Superfluid donorAddress={address} amountDonated={amount} percent={percent} />
+                  {/* <Superfluid donorAddress={address} amountDonated={amount} percent={percent} /> */}
                 </h4>
               </span>
-              <button className="btn btn-primary">
+              <button className="btn btn-primary"
+                onClick={ depositAssetToOrgContract }>
                 Give <HeartFilled />
               </button>
             </div>
