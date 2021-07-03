@@ -14,6 +14,7 @@ import { startTransfer } from '../superfluid/superfluid';
 import { useInterval } from "../hooks"
 import { DAI_ABI } from "../constants"
 import "./Campaign.scss"
+import abi from '../Donation.json';
 
 const { Step } = Steps
 const { Text } = Typography
@@ -31,6 +32,8 @@ const Campaign = ({
 }) => {
 
   let signer = selectedProvider && selectedProvider.getSigner()
+  let contractAddress = '0x0E4C755Da697CfF8bF97A85f8BABce27a5E5D97A';
+  let contract = new ethers.Contract(contractAddress, abi, signer);
 
     useEffect(() => {
         Events.scrollEvent.register('begin', function (to, element) { });
@@ -247,29 +250,33 @@ const Campaign = ({
             setDepositing(true)
     
             let donationContractAddress = writeContracts['Donation'].address
-            startTransfer(superFluidAmount.toString(), lendingPercentage, donorAddress, donationContractAddress)
-    
-            const result = tx(
-                writeContracts.Donation.userDepositUsdc(ethers.utils.parseUnits(aaveAmount.toString(), donationAssetDecimals), ethers.utils.parseUnits("0", 1)),
-                update => {
-                    console.log("📡 Transaction Update:", update);
-                    if (update && (update.status === "confirmed" || update.status === 1)) {
-                    console.log(" 🍾 Transaction " + update.hash + " finished!");
-                    console.log(
-                        " ⛽️ " +
-                        update.gasUsed +
-                        "/" +
-                        (update.gasLimit || update.gas) +
-                        " @ " +
-                        parseFloat(update.gasPrice) / 1000000000 +
-                        " gwei",
-                    );
-                    setDepositSuccess(true)
-                    }
-                }
-            );
-            await tx
-            console.log("awaiting metamask/web3 confirm result...", result);
+            startTransfer(superFluidAmount.toString(), 100, donorAddress, donationContractAddress)
+
+            await contract.userDepositUsdc(ethers.utils.parseUnits(aaveAmount.toString(), donationAssetDecimals), ethers.utils.parseUnits("0", 1), {
+                from: donorAddress
+            });
+            console.log('finished');
+            // const result = tx(
+            //     writeContracts.Donation.userDepositUsdc(ethers.utils.parseUnits(aaveAmount.toString(), donationAssetDecimals), ethers.utils.parseUnits("0", 1)),
+            //     update => {
+            //         console.log("📡 Transaction Update:", update);
+            //         if (update && (update.status === "confirmed" || update.status === 1)) {
+            //         console.log(" 🍾 Transaction " + update.hash + " finished!");
+            //         console.log(
+            //             " ⛽️ " +
+            //             update.gasUsed +
+            //             "/" +
+            //             (update.gasLimit || update.gas) +
+            //             " @ " +
+            //             parseFloat(update.gasPrice) / 1000000000 +
+            //             " gwei",
+            //         );
+            //         setDepositSuccess(true)
+            //         }
+            //     }
+            // );
+            // await tx
+            // console.log("awaiting metamask/web3 confirm result...", result);
             setDepositing(false)
         }
       }
