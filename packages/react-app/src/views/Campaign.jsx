@@ -237,18 +237,20 @@ const Campaign = ({
     const depositAssetToOrgContract = async () => {
 
       if (donationAmount > 0) {
-        const depositedAmount = donationAmount.toString();
-        const aaveAmount = (depositedAmount*((100-lendingPercentage)/100)).toString();
-        console.log('trying to deposit', ethers.utils.parseUnits(aaveAmount, donationAssetDecimals))
+
+        const aaveAmount = (donationAmount*((100-lendingPercentage)/100));
+        const superFluidAmount = donationAmount - aaveAmount
+        console.log(`trying to deposit ${ethers.utils.parseUnits(aaveAmount.toString(), donationAssetDecimals)} to Aave`)
+        console.log(`trying to stream ${ethers.utils.parseUnits(superFluidAmount.toString(), donationAssetDecimals)} through SuperFluid`)
     
-        if (depositedAmount && donationAssetDecimals && writeContracts && writeContracts['Donation']) {
+        if (donationAmount && donationAssetDecimals && writeContracts && writeContracts['Donation']) {
             setDepositing(true)
     
             let donationContractAddress = writeContracts['Donation'].address
-            startTransfer(depositedAmount, lendingPercentage, donorAddress, donationContractAddress);
+            startTransfer(superFluidAmount.toString(), lendingPercentage, donorAddress, donationContractAddress)
     
             const result = tx(
-                writeContracts.Donation.userDepositUsdc(ethers.utils.parseUnits(aaveAmount, donationAssetDecimals), ethers.utils.parseUnits("1", 1)),
+                writeContracts.Donation.userDepositUsdc(ethers.utils.parseUnits(aaveAmount.toString(), donationAssetDecimals), ethers.utils.parseUnits("1", 1)),
                 update => {
                     console.log("📡 Transaction Update:", update);
                     if (update && (update.status === "confirmed" || update.status === 1)) {
