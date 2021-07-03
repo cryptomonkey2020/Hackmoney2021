@@ -1,24 +1,23 @@
 import React from "react";
-import { Button, Form } from "antd";
+import { Button } from "antd";
 import SuperfluidSDK from "@superfluid-finance/js-sdk";
 import { Web3Provider } from "@ethersproject/providers";
 import Web3 from "web3";
 import Counter from "../Counter";
-import testTokenAbi from "./abi/testToken.json";
 
 const web3 = new Web3(Web3.givenProvider);
 
-export default function Superfluid({ address, amountDonated }) {
+export default function Superfluid({ address, amountDonated, percent }) {
 
-  const fUSDCxAddress = "0x25b5cd2e6ebaedaa5e21d0ecf25a567ee9704aa7";
+  // USDCxAddress is a Super Token wrapper
+  const USDCxAddress = "0x6212e5ee1221c9b083a6de5dfdb5209df63c8f95";
   const recipientAddress = ""; //Need org address for hard code
-  const amount = amountDonated;
-  const rateName = "month";
-
+  const amount = amountDonated * (percent / 100);
+  const rateName = "hour";
+  const flow = flowRate(amount, rateName);
+ 
   function rate(_rate) {
     switch (_rate) {
-      case "minute":
-        return 60;
       case "hour":
         return 60 * 60;
       case "day":
@@ -29,67 +28,68 @@ export default function Superfluid({ address, amountDonated }) {
   }
 
   function flowRate(_amount, _rate) {
-    const amount = _amount + "0".repeat(18);
+    const amount = +(_amount + "e18");
     return (amount / rate(_rate)).toString().split(".", 1)[0];
   }
 
   async function startTransfer() {
     const sf = new SuperfluidSDK.Framework({
       ethers: new Web3Provider(window.ethereum),
-      tokens: ["fUSDC", "fUSDCx"],
+      // tokens: ["fUSDC", "fUSDCx"],
     });
     await sf.initialize();
-
+    const { ISuperToken } = sf.contracts;
     const userWallet = address;
+
+    /*
+     * Minting, approve and upgrade Fake Tokens
     const fUSDC = await sf.contracts.TestToken.at(sf.tokens.fUSDC.address);
     const fUSDCx = sf.tokens.fUSDCx;
-    // Only need if user doen't have fUSDC
     await fUSDC.mint(userWallet, web3.utils.toWei("0.001", "ether"), { from: userWallet });
-    // Only on first time (conditional not to run after the first approval)
     await fUSDC.approve(fUSDCx.address, "1" + "0".repeat(42), { from: userWallet });
-    // Only if the user doesn't have USDCx
     await fUSDCx.upgrade(web3.utils.toWei(amount, "ether"), { from: userWallet });
+    *
+    */
+
+    const USDCx = await ISuperToken.at(USDCxAddress);
+    await USDCx.upgrade(web3.utils.toWei(amount, "ether"), { from: userWallet });
 
     const user = sf.user({
       address: userWallet,
-      token: fUSDCxAddress,
+      token: USDCxAddress,
     });
 
     await user.flow({
       recipient: recipientAddress,
-      flowRate: flowRate(amount, rateName),
+      flowRate: flow,
     });
   }
 
   // Stops transfer (optional future function)
-  // async function stopTransfer() {
-  //   const sf = new SuperfluidSDK.Framework({
-  //     ethers: new Web3Provider(window.ethereum),
-  //     tokens: ["fUSDC", "fUSDCx"],
-  //   });
+  async function stopTransfer() {
+    const sf = new SuperfluidSDK.Framework({
+      ethers: new Web3Provider(window.ethereum)
+    });
 
-  //   await sf.initialize();
+    await sf.initialize();
 
-  //   const userWallet = address;
-  //   const user = sf.user({
-  //     address: userWallet,
-  //     token: fUSDCxAddress,
-  //   });
+    const userWallet = address;
+    const user = sf.user({
+      address: userWallet,
+      token: USDCxAddress,
+    });
 
-  //   await user.flow({
-  //     recipient: recipientAddress,
-  //     flowRate: "0",
-  // });
-  // }
+    await user.flow({
+      recipient: recipientAddress,
+      flowRate: "0",
+    });
+  }
 
   return (
     <>
-      <Form.Item>
-        <Button className="btn btn-primary-light" onClick={startTransfer}>
-          Give ❤️
-        </Button>
-      </Form.Item>
-      <Counter initialValue={amount} rate={rateName} />
+      ${amount}
+      <Button className="btn btn-primary-light" onClick={startTransfer}></Button>
+      <Counter initialValue={amount} rate={rate(rateName)} />
     </>
   );
 }

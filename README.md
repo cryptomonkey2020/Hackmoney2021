@@ -68,6 +68,7 @@ yarn install
 ```
 REACT_APP_PROVIDER=https://kovan.infura.io/v3/0982eb85b1bb42aba2cb1ceeef545e1b
 REACT_APP_NETWORK=kovan
+```
 
 * put your private key under packages/hardhat/mnemonic.txt and run the following command:
 yarn run account 
